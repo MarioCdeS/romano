@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/MarioCdeS/romano/linalg"
+	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
 type projectile struct {

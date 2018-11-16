@@ -3,6 +3,8 @@ package linalg
 import (
 	"fmt"
 	"testing"
+
+	"github.com/MarioCdeS/romano/tracer"
 )
 
 func ExampleNewVector() {
@@ -32,7 +34,7 @@ func TestNewVector(t *testing.T) {
 func TestVector_AddVector(t *testing.T) {
 	v1 := NewVector(3, -2, 5)
 	v2 := NewVector(-2, 3, 1)
-	expected := NewVector(1, 1, 6)
+	expected := NewVector(1, 1, 7)
 	got := v1.Add(v2)
 
 	assertVector(t, got)
@@ -87,7 +89,7 @@ func TestVector_Dot(t *testing.T) {
 	expected := 20.0
 	got := v1.Dot(v2)
 
-	if !Equalf64(expected, got) {
+	if !tracer.Equalf64(expected, got) {
 		t.Errorf("expected %g, got %g", expected, got)
 	}
 }
@@ -112,7 +114,7 @@ func TestVector_Magnitude(t *testing.T) {
 	expected := 5.0
 	got := v.Magnitude()
 
-	if !Equalf64(expected, got) {
+	if !tracer.Equalf64(expected, got) {
 		t.Errorf("expected %g, got %g", expected, got)
 	}
 }
@@ -122,7 +124,7 @@ func TestVector_Normalized(t *testing.T) {
 	expected := NewVector(0, 3.0/5.0, 4.0/5.0)
 	got := v.Normalized()
 
-	if !Equalf64(got.Magnitude(), 1) {
+	if !tracer.Equalf64(got.Magnitude(), 1) {
 		t.Error("not a unit vector")
 	}
 

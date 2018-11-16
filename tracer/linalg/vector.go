@@ -9,50 +9,50 @@ func NewVector(x, y, z float64) *Vector {
 }
 
 func (v *Vector) Add(other *Vector) *Vector {
-	return (*Vector)((*quadruple)(v).add((*quadruple)(other)))
+	return (*Vector)((*quadruple)(v).Add((*quadruple)(other)))
 }
 
 func (v *Vector) Sub(other *Vector) *Vector {
-	return (*Vector)((*quadruple)(v).sub((*quadruple)(other)))
+	return (*Vector)((*quadruple)(v).Sub((*quadruple)(other)))
 }
 
 func (v *Vector) Mul(scalar float64) *Vector {
-	return (*Vector)((*quadruple)(v).mul(scalar))
+	return (*Vector)((*quadruple)(v).Mul(scalar))
 }
 
 func (v *Vector) Div(scalar float64) *Vector {
-	return (*Vector)((*quadruple)(v).div(scalar))
+	return (*Vector)((*quadruple)(v).Div(scalar))
 }
 
 func (v *Vector) Neg() *Vector {
-	return (*Vector)((*quadruple)(v).neg())
+	return (*Vector)((*quadruple)(v).Neg())
 }
 
 func (v *Vector) Dot(other *Vector) float64 {
-	return (*quadruple)(v).dot((*quadruple)(other))
+	return (*quadruple)(v).Dot((*quadruple)(other))
 }
 
 func (v *Vector) Cross(other *Vector) *Vector {
 	return &Vector{
-		v.Y*other.Z - v.Z*other.Y,
-		v.Z*other.X - v.X*other.Z,
-		v.X*other.Y - v.Y*other.X,
+		v.y*other.z - v.z*other.y,
+		v.z*other.x - v.x*other.z,
+		v.x*other.y - v.y*other.x,
 		0,
 	}
 }
 
 func (v *Vector) Magnitude() float64 {
-	return (*quadruple)(v).magnitude()
+	return (*quadruple)(v).Magnitude()
 }
 
 func (v *Vector) Normalized() *Vector {
-	return (*Vector)((*quadruple)(v).normalized())
+	return (*Vector)((*quadruple)(v).Normalized())
 }
 
 func (v *Vector) Equal(other *Vector) bool {
-	return (*quadruple)(v).equal((*quadruple)(other))
+	return (*quadruple)(v).Equal((*quadruple)(other))
 }
 
 func (v *Vector) String() string {
-	return fmt.Sprintf("V(%g, %g, %g)", v.X, v.Y, v.Z)
+	return fmt.Sprintf("V(%g, %g, %g)", v.x, v.y, v.z)
 }

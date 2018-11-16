@@ -1,8 +1,6 @@
-package linalg
+package tracer
 
-import (
-	"math"
-)
+import "math"
 
 var epsilon float64
 

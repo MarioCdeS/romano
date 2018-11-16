@@ -33,7 +33,7 @@ func TestPoint_AddVector(t *testing.T) {
 	p := NewPoint(1, 2, 3)
 	v := NewVector(1, 2, 3)
 	expected := NewPoint(2, 4, 6)
-	got := p.AddVector(v)
+	got := p.Add(v)
 
 	assertPoint(t, got)
 	assertPointsEqual(t, expected, got)
