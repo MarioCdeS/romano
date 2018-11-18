@@ -2,26 +2,26 @@ package linalg
 
 import "fmt"
 
-type Point quadruple
+type Point Quadruple
 
 func NewPoint(x, y, z float64) *Point {
 	return &Point{x, y, z, 1}
 }
 
 func (p *Point) Add(v *Vector) *Point {
-	return (*Point)((*quadruple)(p).Add((*quadruple)(v)))
+	return (*Point)((*Quadruple)(p).Add((*Quadruple)(v)))
 }
 
 func (p *Point) SubVector(v *Vector) *Point {
-	return (*Point)((*quadruple)(p).Sub((*quadruple)(v)))
+	return (*Point)((*Quadruple)(p).Sub((*Quadruple)(v)))
 }
 
-func (p *Point) SubPoint(other *Point) *Vector {
-	return (*Vector)((*quadruple)(p).Sub((*quadruple)(other)))
+func (p *Point) SubPoint(oth *Point) *Vector {
+	return (*Vector)((*Quadruple)(p).Sub((*Quadruple)(oth)))
 }
 
-func (p *Point) Equal(other *Point) bool {
-	return (*quadruple)(p).Equal((*quadruple)(other))
+func (p *Point) Equal(oth *Point) bool {
+	return (*Quadruple)(p).Equal((*Quadruple)(oth))
 }
 
 func (p *Point) String() string {

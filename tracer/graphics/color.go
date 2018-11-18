@@ -2,81 +2,51 @@ package graphics
 
 import (
 	"fmt"
-
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
-type Color struct {
-	r float64
-	g float64
-	b float64
-	a float64
-}
+type Color linalg.Quadruple
 
 func NewColor(r, g, b, a float64) *Color {
 	return &Color{r, g, b, a}
 }
 
 func (c *Color) R() float64 {
-	return c.r
+	return c[0]
 }
 
 func (c *Color) G() float64 {
-	return c.g
+	return c[1]
 }
 
 func (c *Color) B() float64 {
-	return c.b
+	return c[2]
 }
 
 func (c *Color) A() float64 {
-	return c.a
+	return c[3]
 }
 
-func (c *Color) Add(other *Color) *Color {
-	return &Color{
-		c.r + other.r,
-		c.g + other.g,
-		c.b + other.b,
-		c.a + other.a,
-	}
+func (c *Color) Add(oth *Color) *Color {
+	return (*Color)((*linalg.Quadruple)(c).Add((*linalg.Quadruple)(oth)))
 }
 
-func (c *Color) Sub(other *Color) *Color {
-	return &Color{
-		c.r - other.r,
-		c.g - other.g,
-		c.b - other.b,
-		c.a - other.a,
-	}
+func (c *Color) Sub(oth *Color) *Color {
+	return (*Color)((*linalg.Quadruple)(c).Sub((*linalg.Quadruple)(oth)))
 }
 
 func (c *Color) MulScalar(scalar float64) *Color {
-	return &Color{
-		c.r * scalar,
-		c.g * scalar,
-		c.b * scalar,
-		c.a * scalar,
-	}
+	return (*Color)((*linalg.Quadruple)(c).Mul(scalar))
 }
 
-func (c *Color) MulColor(other *Color) *Color {
-	// Hadamard product
-	return &Color{
-		c.r * other.r,
-		c.g * other.g,
-		c.b * other.b,
-		c.a * other.a,
-	}
+func (c *Color) MulColor(oth *Color) *Color {
+	return (*Color)((*linalg.Quadruple)(c).Hadamard((*linalg.Quadruple)(oth)))
 }
 
-func (c *Color) Equal(other *Color) bool {
-	return tracer.Equalf64(c.r, other.r) &&
-		tracer.Equalf64(c.g, other.g) &&
-		tracer.Equalf64(c.b, other.b) &&
-		tracer.Equalf64(c.a, other.a)
+func (c *Color) Equal(oth *Color) bool {
+	return (*linalg.Quadruple)(c).Equal((*linalg.Quadruple)(oth))
 }
 
 func (c *Color) String() string {
-	return fmt.Sprintf("C(%g, %g, %g, %g)", c.r, c.g, c.b, c.a)
+	return fmt.Sprintf("C(%g, %g, %g, %g)", c[0], c[1], c[2], c[3])
 }
