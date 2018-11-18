@@ -8,6 +8,18 @@ func NewVector(x, y, z float64) *Vector {
 	return &Vector{x, y, z, 0}
 }
 
+func (v *Vector) X() float64 {
+	return v[0]
+}
+
+func (v *Vector) Y() float64 {
+	return v[1]
+}
+
+func (v *Vector) Z() float64 {
+	return v[2]
+}
+
 func (v *Vector) Add(oth *Vector) *Vector {
 	return (*Vector)((*Quadruple)(v).Add((*Quadruple)(oth)))
 }

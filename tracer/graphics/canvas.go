@@ -30,13 +30,37 @@ func NewCanvas(width, height int) *Canvas {
 	}
 }
 
+func (c *Canvas) Width() int {
+	return c.width
+}
+
+func (c *Canvas) Height() int {
+	return c.height
+}
+
+func (c *Canvas) Clear(col *Color) {
+	for y := 0; y < c.height; y++ {
+		for x := 0; x < c.width; x++ {
+			c.pixels[y][x] = *col
+		}
+	}
+}
+
 func (c *Canvas) At(x, y int) *Color {
 	col := c.pixels[y][x]
 	return &col
 }
 
-func (c *Canvas) Set(x, y int, color *Color) {
-	c.pixels[y][x] = *color
+func (c *Canvas) Set(x, y int, col *Color) {
+	if x < 0 || x >= c.width {
+		return
+	}
+
+	if y < 0 || y >= c.height {
+		return
+	}
+
+	c.pixels[y][x] = *col
 }
 
 func (c *Canvas) ToImage() image.Image {

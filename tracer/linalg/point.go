@@ -8,6 +8,18 @@ func NewPoint(x, y, z float64) *Point {
 	return &Point{x, y, z, 1}
 }
 
+func (p *Point) X() float64 {
+	return p[0]
+}
+
+func (p *Point) Y() float64 {
+	return p[1]
+}
+
+func (p *Point) Z() float64 {
+	return p[2]
+}
+
 func (p *Point) Add(v *Vector) *Point {
 	return (*Point)((*Quadruple)(p).Add((*Quadruple)(v)))
 }

@@ -2,7 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/MarioCdeS/romano/tracer/graphics"
 	"github.com/MarioCdeS/romano/tracer/linalg"
+	"image/png"
+	"math"
+	"os"
 )
 
 type projectile struct {
@@ -18,7 +22,7 @@ type world struct {
 func main() {
 	p := projectile{
 		linalg.NewPoint(0, 1, 0),
-		linalg.NewVector(1, 1, 0).Normalized(),
+		linalg.NewVector(0.5, 1, 0).Normalized().Mul(10),
 	}
 
 	w := world{
@@ -26,14 +30,31 @@ func main() {
 		linalg.NewVector(-0.01, 0, 0),
 	}
 
-	var count int
+	canvas := graphics.NewCanvas(800, 600)
+	canvas.Clear(graphics.NewColor(0, 0, 0, 1))
 
-	for p.position.Y > 0 {
-		pos := p.position.AddVector(p.velocity)
-		vel := p.velocity.Add(w.gravity).Add(w.wind)
-		p = projectile{pos, vel}
-		count++
+	white := graphics.NewColor(1, 1, 1, 1)
 
-		fmt.Printf("%d -> Pos: %s\tVel: %s\n", count, pos, vel)
+	for p.position.X() < float64(canvas.Width()) && p.position.Y() > 0 {
+		p.position = p.position.Add(p.velocity)
+		p.velocity = p.velocity.Add(w.gravity).Add(w.wind)
+
+		x := int(math.Floor(p.position.X()))
+		y := canvas.Height() - int(math.Floor(p.position.Y())) - 1
+		canvas.Set(x, y, white)
+	}
+
+	f, err := os.Create("out.png")
+
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	defer f.Close()
+
+	if err := png.Encode(f, canvas.ToImage()); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
