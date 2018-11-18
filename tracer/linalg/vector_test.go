@@ -34,7 +34,7 @@ func TestNewVector(t *testing.T) {
 func TestVector_AddVector(t *testing.T) {
 	v1 := NewVector(3, -2, 5)
 	v2 := NewVector(-2, 3, 1)
-	expected := NewVector(1, 1, 7)
+	expected := NewVector(1, 1, 6)
 	got := v1.Add(v2)
 
 	assertVector(t, got)
@@ -141,7 +141,7 @@ func BenchmarkVector_Equals(b *testing.B) {
 }
 
 func assertVector(t *testing.T, v *Vector) {
-	if v.w != 0 {
+	if v[3] != 0 {
 		t.Error("not a vector")
 	}
 }

@@ -34,9 +34,9 @@ func (v *Vector) Dot(other *Vector) float64 {
 
 func (v *Vector) Cross(other *Vector) *Vector {
 	return &Vector{
-		v.y*other.z - v.z*other.y,
-		v.z*other.x - v.x*other.z,
-		v.x*other.y - v.y*other.x,
+		v[1]*other[2] - v[2]*other[1],
+		v[2]*other[0] - v[0]*other[2],
+		v[0]*other[1] - v[1]*other[0],
 		0,
 	}
 }
@@ -54,5 +54,5 @@ func (v *Vector) Equal(other *Vector) bool {
 }
 
 func (v *Vector) String() string {
-	return fmt.Sprintf("V(%g, %g, %g)", v.x, v.y, v.z)
+	return fmt.Sprintf("V(%g, %g, %g)", v[0], v[1], v[2])
 }

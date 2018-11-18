@@ -60,7 +60,7 @@ func TestPoint_SubPoint(t *testing.T) {
 }
 
 func assertPoint(t *testing.T, p *Point) {
-	if p.w != 1 {
+	if p[3] != 1 {
 		t.Error("not a point")
 	}
 }

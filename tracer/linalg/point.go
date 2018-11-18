@@ -25,5 +25,5 @@ func (p *Point) Equal(other *Point) bool {
 }
 
 func (p *Point) String() string {
-	return fmt.Sprintf("P(%g, %g, %g)", p.x, p.y, p.z)
+	return fmt.Sprintf("P(%g, %g, %g)", p[0], p[1], p[2])
 }
