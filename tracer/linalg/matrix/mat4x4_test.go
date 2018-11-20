@@ -1,4 +1,4 @@
-package matrix4x4
+package matrix
 
 import (
 	"fmt"
@@ -15,9 +15,9 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestNew(t *testing.T) {
-	elems := randomElements()
-	m := New(elems...)
+func TestNew4x4(t *testing.T) {
+	elems := randomElements16()
+	m := New4x4(elems...)
 
 	for i, e := range elems {
 		row := i / 4
@@ -30,79 +30,59 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestAdd(t *testing.T) {
-	elems1 := randomElements()
-	elems2 := randomElements()
+func TestMat4x4_Add(t *testing.T) {
+	elems1 := randomElements16()
+	elems2 := randomElements16()
 	sums := make([]float64, 16)
 
 	for i := 0; i < 16; i++ {
 		sums[i] = elems1[i] + elems2[i]
 	}
 
-	m1 := New(elems1...)
-	m2 := New(elems2...)
-	rem := *m1
-	exp := New(sums...)
-	got := Add(m1, m2)
-
-	if !rem.Equal(m1) {
-		t.Error("first argument modified")
-	}
+	exp := New4x4(sums...)
+	got := New4x4(elems1...).Add(New4x4(elems2...))
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
 	}
 }
 
-func TestScale(t *testing.T) {
-	elems := randomElements()
+func TestMat4x4_Scale(t *testing.T) {
+	elems := randomElements16()
 	scaled := make([]float64, 16)
 
 	for i := 0; i < 16; i++ {
 		scaled[i] = elems[i] * 5
 	}
 
-	m := New(elems...)
-	rem := *m
-	exp := New(scaled...)
-	got := Scale(m, 5)
-
-	if !rem.Equal(m) {
-		t.Error("argument modified")
-	}
+	exp := New4x4(scaled...)
+	got := New4x4(elems...).Scale(5)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
 	}
 }
 
-func TestTranspose(t *testing.T) {
-	elems := randomElements()
+func TestMat4x4_T(t *testing.T) {
+	elems := randomElements16()
 	transElems := make([]float64, 16)
 
 	for i := 0; i < 16; i++ {
 		transElems[(i%4)*4+(i/4)] = elems[i]
 	}
 
-	m := New(elems...)
-	rem := *m
-	exp := New(transElems...)
-	got := Transpose(m)
-
-	if !rem.Equal(m) {
-		t.Error("argument modified")
-	}
+	exp := New4x4(transElems...)
+	got := New4x4(elems...).T()
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
 	}
 }
 
-func TestDot(t *testing.T) {
-	m1 := New(randomElements()...)
-	rem := *m1
-	m2 := New(randomElements()...)
-	exp := New()
+func TestMat4x4_Dot(t *testing.T) {
+	m1 := New4x4(randomElements16()...)
+	m2 := New4x4(randomElements16()...)
+	exp := New4x4()
 
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 4; j++ {
@@ -112,11 +92,7 @@ func TestDot(t *testing.T) {
 		}
 	}
 
-	got := Dot(m1, m2)
-
-	if !rem.Equal(m1) {
-		t.Error("argument modified")
-	}
+	got := m1.Dot(m2)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
@@ -124,7 +100,7 @@ func TestDot(t *testing.T) {
 }
 
 func TestMatrix4x4_Equal(t *testing.T) {
-	m := New(randomElements()...)
+	m := New4x4(randomElements16()...)
 
 	if !m.Equal(m) {
 		t.Error("not reflexive")
@@ -142,7 +118,7 @@ func TestMatrix4x4_Equal(t *testing.T) {
 	}
 }
 
-func randomElements() []float64 {
+func randomElements16() []float64 {
 	res := make([]float64, 16)
 
 	for i := 0; i < 16; i++ {
@@ -152,6 +128,6 @@ func randomElements() []float64 {
 	return res
 }
 
-func expectedGotErrorString(exp, got *Matrix4x4) string {
+func expectedGotErrorString(exp, got fmt.Stringer) string {
 	return fmt.Sprintf("\nexpected:\n%sgot:\n%s", exp, got)
 }
