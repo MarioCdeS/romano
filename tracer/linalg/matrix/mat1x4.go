@@ -16,6 +16,15 @@ func New(elems ...float64) *Mat1x4 {
 	return &mat
 }
 
-func Transpose(m *Mat1x4) *Mat4x1 {
+func (m *Mat1x4) Copy() *Mat1x4 {
+	res := *m
+	return &res
+}
+
+func (m *Mat1x4) T() *Mat4x1 {
 	return (*Mat4x1)(m)
+}
+
+func (m *Mat1x4) Dot(oth *Mat4x1) float64 {
+	return m[0]*oth[0] + m[1]*oth[1] + m[2]*oth[2] + m[3]*oth[3]
 }

@@ -99,6 +99,24 @@ func TestMat4x4_Dot(t *testing.T) {
 	}
 }
 
+func TestMat4x4_Dot4x1(t *testing.T) {
+	m1 := New4x4(randomElements16()...)
+	m2 := New4x1(randomElements4()...)
+	exp := New4x1()
+
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			exp[i] += m1[i][j] * m2[j]
+		}
+	}
+
+	got := m1.Dot4x1(m2)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
 func TestMatrix4x4_Equal(t *testing.T) {
 	m := New4x4(randomElements16()...)
 

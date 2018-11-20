@@ -37,6 +37,24 @@ func (m *Mat4x1) Add(oth *Mat4x1) *Mat4x1 {
 	return m
 }
 
+func (m *Mat4x1) Sub(oth *Mat4x1) *Mat4x1 {
+	m[0] -= oth[0]
+	m[1] -= oth[1]
+	m[2] -= oth[2]
+	m[3] -= oth[3]
+
+	return m
+}
+
+func (m *Mat4x1) Scale(scalar float64) *Mat4x1 {
+	m[0] *= scalar
+	m[1] *= scalar
+	m[2] *= scalar
+	m[3] *= scalar
+
+	return m
+}
+
 func (m *Mat4x1) T() *Mat1x4 {
 	return (*Mat1x4)(m)
 }

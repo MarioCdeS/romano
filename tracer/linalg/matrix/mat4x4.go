@@ -104,6 +104,17 @@ func (m *Mat4x4) Dot(oth *Mat4x4) *Mat4x4 {
 	return res
 }
 
+func (m *Mat4x4) Dot4x1(oth *Mat4x1) *Mat4x1 {
+	res := New4x1()
+
+	res[0] = m[0][0]*oth[0] + m[0][1]*oth[1] + m[0][2]*oth[2] + m[0][3]*oth[3]
+	res[1] = m[1][0]*oth[0] + m[1][1]*oth[1] + m[1][2]*oth[2] + m[1][3]*oth[3]
+	res[2] = m[2][0]*oth[0] + m[2][1]*oth[1] + m[2][2]*oth[2] + m[2][3]*oth[3]
+	res[3] = m[3][0]*oth[0] + m[3][1]*oth[1] + m[3][2]*oth[2] + m[3][3]*oth[3]
+
+	return res
+}
+
 func (m *Mat4x4) Equal(oth *Mat4x4) bool {
 	return tracer.Equalf64(m[0][0], oth[0][0]) &&
 		tracer.Equalf64(m[0][1], oth[0][1]) &&

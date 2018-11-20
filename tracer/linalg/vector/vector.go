@@ -1,11 +1,21 @@
-package linalg
+package vector
 
-import "fmt"
+import (
+	"fmt"
+	"math"
 
-type Vector Quadruple
+	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
+)
 
-func NewVector(x, y, z float64) *Vector {
+type Vector matrix.Mat4x1
+
+func New(x, y, z float64) *Vector {
 	return &Vector{x, y, z, 0}
+}
+
+func (v *Vector) Copy() *Vector {
+	res := *v
+	return &res
 }
 
 func (v *Vector) X() float64 {
@@ -21,27 +31,27 @@ func (v *Vector) Z() float64 {
 }
 
 func (v *Vector) Add(oth *Vector) *Vector {
-	return (*Vector)((*Quadruple)(v).Add((*Quadruple)(oth)))
+	return (*Vector)((*matrix.Mat4x1)(v).Add((*matrix.Mat4x1)(oth)))
 }
 
 func (v *Vector) Sub(oth *Vector) *Vector {
-	return (*Vector)((*Quadruple)(v).Sub((*Quadruple)(oth)))
+	return (*Vector)((*matrix.Mat4x1)(v).Sub((*matrix.Mat4x1)(oth)))
 }
 
 func (v *Vector) Mul(scalar float64) *Vector {
-	return (*Vector)((*Quadruple)(v).Mul(scalar))
+	return (*Vector)((*matrix.Mat4x1)(v).Scale(scalar))
 }
 
 func (v *Vector) Div(scalar float64) *Vector {
-	return (*Vector)((*Quadruple)(v).Div(scalar))
+	return (*Vector)((*matrix.Mat4x1)(v).Scale(1.0 / scalar))
 }
 
 func (v *Vector) Neg() *Vector {
-	return (*Vector)((*Quadruple)(v).Neg())
+	return (*Vector)((*matrix.Mat4x1)(v).Scale(-1))
 }
 
 func (v *Vector) Dot(oth *Vector) float64 {
-	return (*Quadruple)(v).Dot((*Quadruple)(oth))
+	return (*matrix.Mat1x4)(v).Dot((*matrix.Mat4x1)(oth))
 }
 
 func (v *Vector) Cross(oth *Vector) *Vector {
@@ -54,15 +64,15 @@ func (v *Vector) Cross(oth *Vector) *Vector {
 }
 
 func (v *Vector) Magnitude() float64 {
-	return (*Quadruple)(v).Magnitude()
+	return math.Sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
 }
 
 func (v *Vector) Normalized() *Vector {
-	return (*Vector)((*Quadruple)(v).Normalized())
+	return v.Div(v.Magnitude())
 }
 
 func (v *Vector) Equal(oth *Vector) bool {
-	return (*Quadruple)(v).Equal((*Quadruple)(oth))
+	return (*matrix.Mat4x1)(v).Equal((*matrix.Mat4x1)(oth))
 }
 
 func (v *Vector) String() string {

@@ -1,4 +1,4 @@
-package linalg
+package vector
 
 import (
 	"fmt"
@@ -7,16 +7,16 @@ import (
 	"github.com/MarioCdeS/romano/tracer"
 )
 
-func ExampleNewVector() {
-	v := NewVector(4.3, -4.2, 3.1)
+func ExampleNew() {
+	v := New(4.3, -4.2, 3.1)
 	fmt.Println(v)
 
 	// Output: V(4.3, -4.2, 3.1)
 }
 
 func ExampleVector_Equal() {
-	v1 := NewVector(1, 2, 3)
-	v2 := NewVector(2, 2, 3)
+	v1 := New(1, 2, 3)
+	v2 := New(2, 2, 3)
 
 	fmt.Println(v1.Equal(v1))
 	fmt.Println(v1.Equal(v2))
@@ -26,15 +26,15 @@ func ExampleVector_Equal() {
 	// false
 }
 
-func TestNewVector(t *testing.T) {
-	v := NewVector(4.3, -4.2, 3.1)
+func TestNew(t *testing.T) {
+	v := New(4.3, -4.2, 3.1)
 	assertVector(t, v)
 }
 
 func TestVector_AddVector(t *testing.T) {
-	v1 := NewVector(3, -2, 5)
-	v2 := NewVector(-2, 3, 1)
-	expected := NewVector(1, 1, 6)
+	v1 := New(3, -2, 5)
+	v2 := New(-2, 3, 1)
+	expected := New(1, 1, 6)
 	got := v1.Add(v2)
 
 	assertVector(t, got)
@@ -42,9 +42,9 @@ func TestVector_AddVector(t *testing.T) {
 }
 
 func TestVector_SubVector(t *testing.T) {
-	v1 := NewVector(3, -2, 5)
-	v2 := NewVector(-2, 3, 1)
-	expected := NewVector(5, -5, 4)
+	v1 := New(3, -2, 5)
+	v2 := New(-2, 3, 1)
+	expected := New(5, -5, 4)
 	got := v1.Sub(v2)
 
 	assertVector(t, got)
@@ -52,22 +52,23 @@ func TestVector_SubVector(t *testing.T) {
 }
 
 func TestVector_Mul(t *testing.T) {
-	v := NewVector(1, -2, 3)
-	expected := NewVector(3.5, -7, 10.5)
+	v := New(1, -2, 3)
+	expected := New(3.5, -7, 10.5)
 	got := v.Mul(3.5)
 
 	assertVector(t, got)
 	assertVectorsEqual(t, expected, got)
 
-	expected = NewVector(0.5, -1, 1.5)
+	v = New(1, -2, 3)
+	expected = New(0.5, -1, 1.5)
 	got = v.Mul(0.5)
 
 	assertVectorsEqual(t, expected, got)
 }
 
 func TestVector_Div(t *testing.T) {
-	v := NewVector(1, -2, 3)
-	expected := NewVector(0.5, -1, 1.5)
+	v := New(1, -2, 3)
+	expected := New(0.5, -1, 1.5)
 	got := v.Div(2)
 
 	assertVector(t, got)
@@ -75,8 +76,8 @@ func TestVector_Div(t *testing.T) {
 }
 
 func TestVector_Neg(t *testing.T) {
-	v := NewVector(1, 2, 3)
-	expected := NewVector(-1, -2, -3)
+	v := New(1, 2, 3)
+	expected := New(-1, -2, -3)
 	got := v.Neg()
 
 	assertVector(t, got)
@@ -84,8 +85,8 @@ func TestVector_Neg(t *testing.T) {
 }
 
 func TestVector_Dot(t *testing.T) {
-	v1 := NewVector(1, 2, 3)
-	v2 := NewVector(2, 3, 4)
+	v1 := New(1, 2, 3)
+	v2 := New(2, 3, 4)
 	expected := 20.0
 	got := v1.Dot(v2)
 
@@ -95,9 +96,9 @@ func TestVector_Dot(t *testing.T) {
 }
 
 func TestVector_Cross(t *testing.T) {
-	v1 := NewVector(1, 2, 3)
-	v2 := NewVector(2, 3, 4)
-	expected := NewVector(-1, 2, -1)
+	v1 := New(1, 2, 3)
+	v2 := New(2, 3, 4)
+	expected := New(-1, 2, -1)
 	got := v1.Cross(v2)
 
 	assertVector(t, got)
@@ -110,7 +111,7 @@ func TestVector_Cross(t *testing.T) {
 }
 
 func TestVector_Magnitude(t *testing.T) {
-	v := NewVector(0, 3, 4)
+	v := New(0, 3, 4)
 	expected := 5.0
 	got := v.Magnitude()
 
@@ -120,8 +121,8 @@ func TestVector_Magnitude(t *testing.T) {
 }
 
 func TestVector_Normalized(t *testing.T) {
-	v := NewVector(0, 3, 4)
-	expected := NewVector(0, 3.0/5.0, 4.0/5.0)
+	v := New(0, 3, 4)
+	expected := New(0, 3.0/5.0, 4.0/5.0)
 	got := v.Normalized()
 
 	if !tracer.Equalf64(got.Magnitude(), 1) {
@@ -133,7 +134,7 @@ func TestVector_Normalized(t *testing.T) {
 }
 
 func BenchmarkVector_Equals(b *testing.B) {
-	v := NewVector(1, 2, 3)
+	v := New(1, 2, 3)
 
 	for i := 0; i < b.N; i++ {
 		v.Equal(v)
