@@ -14,7 +14,7 @@ func TestNew4x1(t *testing.T) {
 	for i, e := range elems {
 		got := m[i]
 
-		if !tracer.Equalf64(e, got) {
+		if !tracer.ApproxEqual(e, got) {
 			t.Errorf("at (%d, 0), expected %g, got %g", i, e, got)
 		}
 	}

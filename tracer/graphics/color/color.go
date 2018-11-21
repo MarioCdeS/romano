@@ -1,14 +1,20 @@
-package graphics
+package color
 
 import (
 	"fmt"
-	"github.com/MarioCdeS/romano/tracer/linalg"
+
+	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
 )
 
-type Color linalg.Quadruple
+type Color matrix.Mat4x1
 
-func NewColor(r, g, b, a float64) *Color {
+func New(r, g, b, a float64) *Color {
 	return &Color{r, g, b, a}
+}
+
+func (c *Color) Copy() *Color {
+	res := *c
+	return &res
 }
 
 func (c *Color) R() float64 {
@@ -28,23 +34,23 @@ func (c *Color) A() float64 {
 }
 
 func (c *Color) Add(oth *Color) *Color {
-	return (*Color)((*linalg.Quadruple)(c).Add((*linalg.Quadruple)(oth)))
+	return (*Color)((*matrix.Mat4x1)(c).Add((*matrix.Mat4x1)(oth)))
 }
 
 func (c *Color) Sub(oth *Color) *Color {
-	return (*Color)((*linalg.Quadruple)(c).Sub((*linalg.Quadruple)(oth)))
+	return (*Color)((*matrix.Mat4x1)(c).Sub((*matrix.Mat4x1)(oth)))
 }
 
 func (c *Color) MulScalar(scalar float64) *Color {
-	return (*Color)((*linalg.Quadruple)(c).Mul(scalar))
+	return (*Color)((*matrix.Mat4x1)(c).Scale(scalar))
 }
 
 func (c *Color) MulColor(oth *Color) *Color {
-	return (*Color)((*linalg.Quadruple)(c).Hadamard((*linalg.Quadruple)(oth)))
+	return (*Color)((*matrix.Mat4x1)(c).Hadamard((*matrix.Mat4x1)(oth)))
 }
 
 func (c *Color) Equal(oth *Color) bool {
-	return (*linalg.Quadruple)(c).Equal((*linalg.Quadruple)(oth))
+	return (*matrix.Mat4x1)(c).Equal((*matrix.Mat4x1)(oth))
 }
 
 func (c *Color) String() string {

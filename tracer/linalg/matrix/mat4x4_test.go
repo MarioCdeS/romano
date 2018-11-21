@@ -24,7 +24,7 @@ func TestNew4x4(t *testing.T) {
 		col := i % 4
 		got := m[row][col]
 
-		if !tracer.Equalf64(e, got) {
+		if !tracer.ApproxEqual(e, got) {
 			t.Errorf("at (%d, %d), expected %g, got %g", row, col, e, got)
 		}
 	}
@@ -114,6 +114,63 @@ func TestMat4x4_Dot4x1(t *testing.T) {
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestMat4x4_Dot_Mat4x4ID(t *testing.T) {
+	m := New4x4(randomElements16()...)
+	got := m.Dot(New4x4ID())
+
+	if !m.Equal(got) {
+		t.Error(expectedGotErrorString(m, got))
+	}
+}
+
+func TestMat4x4_Det(t *testing.T) {
+	m := New4x4(-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9)
+	got := m.Det()
+
+	if !tracer.ApproxEqual(-4071, got) {
+		t.Errorf("expected -4071, got %g", got)
+	}
+}
+
+func TestMat4x4_Inv(t *testing.T) {
+	const det = 532
+
+	m := New4x4(-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4)
+
+	exp := New4x4(
+		116, 240, 128, -24,
+		-430, -775, -236, 277,
+		-42, -119, -28, 105,
+		-278, -433, -160, 163,
+	).Scale(1.0 / det)
+
+	got, err := m.Inv()
+
+	if err != nil {
+		t.Error(err)
+	} else if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestMat4x4_Inv2(t *testing.T) {
+	for {
+		a := New4x4(randomElements16()...)
+		b := New4x4(randomElements16()...)
+		c := a.Dot(b)
+
+		if inv, err := b.Inv(); err == nil {
+			got := c.Dot(inv)
+
+			if !a.Equal(got) {
+				t.Error(expectedGotErrorString(a, got))
+			}
+
+			break
+		}
 	}
 }
 

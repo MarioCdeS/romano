@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -21,6 +22,15 @@ func New4x4(elems ...float64) *Mat4x4 {
 	}
 
 	return &mat
+}
+
+func New4x4ID() *Mat4x4 {
+	return &Mat4x4{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1},
+	}
 }
 
 func (m *Mat4x4) Copy() *Mat4x4 {
@@ -115,23 +125,119 @@ func (m *Mat4x4) Dot4x1(oth *Mat4x1) *Mat4x1 {
 	return res
 }
 
+func (m *Mat4x4) SubMat(i, j int) *Mat3x3 {
+	if i < 0 || i >= 4 {
+		panic("row index out of bounds")
+	}
+
+	if j < 0 || j >= 4 {
+		panic("column index out of bounds")
+	}
+
+	res := New3x3()
+
+	for di, si := 0, 0; di < 3; di, si = di+1, si+1 {
+		if si == i {
+			si++
+		}
+
+		for dj, sj := 0, 0; dj < 3; dj, sj = dj+1, sj+1 {
+			if sj == j {
+				sj++
+			}
+
+			res[di][dj] = m[si][sj]
+		}
+	}
+
+	return res
+}
+
+func (m *Mat4x4) Minor(i, j int) float64 {
+	return m.SubMat(i, j).Det()
+}
+
+func (m *Mat4x4) Cofactor(i, j int) float64 {
+	minor := m.Minor(i, j)
+
+	if (i+j)%2 == 0 {
+		return minor
+	} else {
+		return -minor
+	}
+}
+
+func (m *Mat4x4) Det() float64 {
+	return m[0][0]*m.Cofactor(0, 0) + m[0][1]*m.Cofactor(0, 1) + m[0][2]*m.Cofactor(0, 2) + m[0][3]*m.Cofactor(0, 3)
+}
+
+func (m *Mat4x4) Inv() (*Mat4x4, error) {
+	det := m.Det()
+
+	if det == 0 {
+		return nil, errors.New("matrix is not invertible")
+	}
+
+	res := New4x4()
+
+	// Cofactors, transpose, and division by determinant in one
+	res[0][0] = m.Cofactor(0, 0) / det
+	res[0][1] = m.Cofactor(1, 0) / det
+	res[0][2] = m.Cofactor(2, 0) / det
+	res[0][3] = m.Cofactor(3, 0) / det
+	res[1][0] = m.Cofactor(0, 1) / det
+	res[1][1] = m.Cofactor(1, 1) / det
+	res[1][2] = m.Cofactor(2, 1) / det
+	res[1][3] = m.Cofactor(3, 1) / det
+	res[2][0] = m.Cofactor(0, 2) / det
+	res[2][1] = m.Cofactor(1, 2) / det
+	res[2][2] = m.Cofactor(2, 2) / det
+	res[2][3] = m.Cofactor(3, 2) / det
+	res[3][0] = m.Cofactor(0, 3) / det
+	res[3][1] = m.Cofactor(1, 3) / det
+	res[3][2] = m.Cofactor(2, 3) / det
+	res[3][3] = m.Cofactor(3, 3) / det
+
+	return res, nil
+}
+
 func (m *Mat4x4) Equal(oth *Mat4x4) bool {
-	return tracer.Equalf64(m[0][0], oth[0][0]) &&
-		tracer.Equalf64(m[0][1], oth[0][1]) &&
-		tracer.Equalf64(m[0][2], oth[0][2]) &&
-		tracer.Equalf64(m[0][3], oth[0][3]) &&
-		tracer.Equalf64(m[1][0], oth[1][0]) &&
-		tracer.Equalf64(m[1][1], oth[1][1]) &&
-		tracer.Equalf64(m[1][2], oth[1][2]) &&
-		tracer.Equalf64(m[1][3], oth[1][3]) &&
-		tracer.Equalf64(m[2][0], oth[2][0]) &&
-		tracer.Equalf64(m[2][1], oth[2][1]) &&
-		tracer.Equalf64(m[2][2], oth[2][2]) &&
-		tracer.Equalf64(m[2][3], oth[2][3]) &&
-		tracer.Equalf64(m[3][0], oth[3][0]) &&
-		tracer.Equalf64(m[3][1], oth[3][1]) &&
-		tracer.Equalf64(m[3][2], oth[3][2]) &&
-		tracer.Equalf64(m[3][3], oth[3][3])
+	/*
+		return tracer.ApproxEqual(m[0][0], oth[0][0]) &&
+			tracer.ApproxEqual(m[0][1], oth[0][1]) &&
+			tracer.ApproxEqual(m[0][2], oth[0][2]) &&
+			tracer.ApproxEqual(m[0][3], oth[0][3]) &&
+			tracer.ApproxEqual(m[1][0], oth[1][0]) &&
+			tracer.ApproxEqual(m[1][1], oth[1][1]) &&
+			tracer.ApproxEqual(m[1][2], oth[1][2]) &&
+			tracer.ApproxEqual(m[1][3], oth[1][3]) &&
+			tracer.ApproxEqual(m[2][0], oth[2][0]) &&
+			tracer.ApproxEqual(m[2][1], oth[2][1]) &&
+			tracer.ApproxEqual(m[2][2], oth[2][2]) &&
+			tracer.ApproxEqual(m[2][3], oth[2][3]) &&
+			tracer.ApproxEqual(m[3][0], oth[3][0]) &&
+			tracer.ApproxEqual(m[3][1], oth[3][1]) &&
+			tracer.ApproxEqual(m[3][2], oth[3][2]) &&
+			tracer.ApproxEqual(m[3][3], oth[3][3])
+	*/
+	t := tracer.ApproxEqual(m[0][0], oth[0][0])
+	t = t && tracer.ApproxEqual(m[0][1], oth[0][1])
+	t = t && tracer.ApproxEqual(m[0][2], oth[0][2])
+	t = t && tracer.ApproxEqual(m[0][3], oth[0][3])
+	t = t && tracer.ApproxEqual(m[1][0], oth[1][0])
+	t = t && tracer.ApproxEqual(m[1][1], oth[1][1])
+	t = t && tracer.ApproxEqual(m[1][2], oth[1][2])
+	t = t && tracer.ApproxEqual(m[1][3], oth[1][3])
+	t = t && tracer.ApproxEqual(m[2][0], oth[2][0])
+	t = t && tracer.ApproxEqual(m[2][1], oth[2][1])
+	t = t && tracer.ApproxEqual(m[2][2], oth[2][2])
+	t = t && tracer.ApproxEqual(m[2][3], oth[2][3])
+	t = t && tracer.ApproxEqual(m[3][0], oth[3][0])
+	t = t && tracer.ApproxEqual(m[3][1], oth[3][1])
+	t = t && tracer.ApproxEqual(m[3][2], oth[3][2])
+	t = t && tracer.ApproxEqual(m[3][3], oth[3][3])
+
+	return t
 }
 
 func (m *Mat4x4) String() string {

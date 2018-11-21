@@ -2,7 +2,6 @@ package matrix
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/MarioCdeS/romano/tracer"
 )
@@ -55,23 +54,26 @@ func (m *Mat4x1) Scale(scalar float64) *Mat4x1 {
 	return m
 }
 
+func (m *Mat4x1) Hadamard(oth *Mat4x1) *Mat4x1 {
+	m[0] *= oth[0]
+	m[1] *= oth[1]
+	m[2] *= oth[2]
+	m[3] *= oth[3]
+
+	return m
+}
+
 func (m *Mat4x1) T() *Mat1x4 {
 	return (*Mat1x4)(m)
 }
 
 func (m *Mat4x1) Equal(oth *Mat4x1) bool {
-	return tracer.Equalf64(m[0], oth[0]) &&
-		tracer.Equalf64(m[1], oth[1]) &&
-		tracer.Equalf64(m[2], oth[2]) &&
-		tracer.Equalf64(m[3], oth[3])
+	return tracer.ApproxEqual(m[0], oth[0]) &&
+		tracer.ApproxEqual(m[1], oth[1]) &&
+		tracer.ApproxEqual(m[2], oth[2]) &&
+		tracer.ApproxEqual(m[3], oth[3])
 }
 
 func (m *Mat4x1) String() string {
-	sb := strings.Builder{}
-
-	for i := 0; i < 4; i++ {
-		sb.WriteString(fmt.Sprintf("|%16.5f|\n", m[i]))
-	}
-
-	return sb.String()
+	return fmt.Sprintf("|%16.5f|\n|%16.5f|\n|%16.5f|\n|%16.5f|\n", m[0], m[1], m[2], m[3])
 }
