@@ -48,7 +48,7 @@ func TestMatrix4x1_Equal(t *testing.T) {
 		c := *m
 		c[i] = m[i] + 1
 
-		if c.Equal(m) {
+		if !c.Equal(m) {
 			t.Errorf("at (%d, 0), %g not equal %g", i, m[i], c[i])
 		}
 	}

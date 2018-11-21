@@ -186,7 +186,7 @@ func TestMatrix4x4_Equal(t *testing.T) {
 			c := *m
 			c[i][j] = m[i][j] + 1
 
-			if c.Equal(m) {
+			if !c.Equal(m) {
 				t.Errorf("at (%d, %d), %g not equal %g", i, j, m[i][j], c[i][j])
 			}
 		}
@@ -204,5 +204,5 @@ func randomElements16() []float64 {
 }
 
 func expectedGotErrorString(exp, got fmt.Stringer) string {
-	return fmt.Sprintf("\nexpected:\n%sgot:\n%s", exp, got)
+	return fmt.Sprintf("\nexpected:\n%s\ngot:\n%s", exp, got)
 }
