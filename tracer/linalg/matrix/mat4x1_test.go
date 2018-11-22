@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
 func TestNew4x1(t *testing.T) {
@@ -14,7 +14,7 @@ func TestNew4x1(t *testing.T) {
 	for i, e := range elems {
 		got := m[i]
 
-		if !tracer.ApproxEqual(e, got) {
+		if !float.ApproxEqual(e, got) {
 			t.Errorf("at (%d, 0), expected %g, got %g", i, e, got)
 		}
 	}
@@ -48,7 +48,7 @@ func TestMatrix4x1_Equal(t *testing.T) {
 		c := *m
 		c[i] = m[i] + 1
 
-		if !c.Equal(m) {
+		if c.Equal(m) {
 			t.Errorf("at (%d, 0), %g not equal %g", i, m[i], c[i])
 		}
 	}

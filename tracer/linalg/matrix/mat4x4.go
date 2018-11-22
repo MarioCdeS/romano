@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
 type Mat4x4 [4][4]float64
@@ -29,6 +29,15 @@ func New4x4ID() *Mat4x4 {
 		{1, 0, 0, 0},
 		{0, 1, 0, 0},
 		{0, 0, 1, 0},
+		{0, 0, 0, 1},
+	}
+}
+
+func New4x4Translate(dx, dy, dz float64) *Mat4x4 {
+	return &Mat4x4{
+		{1, 0, 0, dx},
+		{0, 1, 0, dy},
+		{0, 0, 1, dz},
 		{0, 0, 0, 1},
 	}
 }
@@ -202,42 +211,22 @@ func (m *Mat4x4) Inv() (*Mat4x4, error) {
 }
 
 func (m *Mat4x4) Equal(oth *Mat4x4) bool {
-	/*
-		return tracer.ApproxEqual(m[0][0], oth[0][0]) &&
-			tracer.ApproxEqual(m[0][1], oth[0][1]) &&
-			tracer.ApproxEqual(m[0][2], oth[0][2]) &&
-			tracer.ApproxEqual(m[0][3], oth[0][3]) &&
-			tracer.ApproxEqual(m[1][0], oth[1][0]) &&
-			tracer.ApproxEqual(m[1][1], oth[1][1]) &&
-			tracer.ApproxEqual(m[1][2], oth[1][2]) &&
-			tracer.ApproxEqual(m[1][3], oth[1][3]) &&
-			tracer.ApproxEqual(m[2][0], oth[2][0]) &&
-			tracer.ApproxEqual(m[2][1], oth[2][1]) &&
-			tracer.ApproxEqual(m[2][2], oth[2][2]) &&
-			tracer.ApproxEqual(m[2][3], oth[2][3]) &&
-			tracer.ApproxEqual(m[3][0], oth[3][0]) &&
-			tracer.ApproxEqual(m[3][1], oth[3][1]) &&
-			tracer.ApproxEqual(m[3][2], oth[3][2]) &&
-			tracer.ApproxEqual(m[3][3], oth[3][3])
-	*/
-	t := tracer.ApproxEqual(m[0][0], oth[0][0])
-	t = t && tracer.ApproxEqual(m[0][1], oth[0][1])
-	t = t && tracer.ApproxEqual(m[0][2], oth[0][2])
-	t = t && tracer.ApproxEqual(m[0][3], oth[0][3])
-	t = t && tracer.ApproxEqual(m[1][0], oth[1][0])
-	t = t && tracer.ApproxEqual(m[1][1], oth[1][1])
-	t = t && tracer.ApproxEqual(m[1][2], oth[1][2])
-	t = t && tracer.ApproxEqual(m[1][3], oth[1][3])
-	t = t && tracer.ApproxEqual(m[2][0], oth[2][0])
-	t = t && tracer.ApproxEqual(m[2][1], oth[2][1])
-	t = t && tracer.ApproxEqual(m[2][2], oth[2][2])
-	t = t && tracer.ApproxEqual(m[2][3], oth[2][3])
-	t = t && tracer.ApproxEqual(m[3][0], oth[3][0])
-	t = t && tracer.ApproxEqual(m[3][1], oth[3][1])
-	t = t && tracer.ApproxEqual(m[3][2], oth[3][2])
-	t = t && tracer.ApproxEqual(m[3][3], oth[3][3])
-
-	return t
+	return float.ApproxEqual(m[0][0], oth[0][0]) &&
+		float.ApproxEqual(m[0][1], oth[0][1]) &&
+		float.ApproxEqual(m[0][2], oth[0][2]) &&
+		float.ApproxEqual(m[0][3], oth[0][3]) &&
+		float.ApproxEqual(m[1][0], oth[1][0]) &&
+		float.ApproxEqual(m[1][1], oth[1][1]) &&
+		float.ApproxEqual(m[1][2], oth[1][2]) &&
+		float.ApproxEqual(m[1][3], oth[1][3]) &&
+		float.ApproxEqual(m[2][0], oth[2][0]) &&
+		float.ApproxEqual(m[2][1], oth[2][1]) &&
+		float.ApproxEqual(m[2][2], oth[2][2]) &&
+		float.ApproxEqual(m[2][3], oth[2][3]) &&
+		float.ApproxEqual(m[3][0], oth[3][0]) &&
+		float.ApproxEqual(m[3][1], oth[3][1]) &&
+		float.ApproxEqual(m[3][2], oth[3][2]) &&
+		float.ApproxEqual(m[3][3], oth[3][3])
 }
 
 func (m *Mat4x4) String() string {

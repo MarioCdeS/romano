@@ -3,7 +3,7 @@ package matrix
 import (
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
 func TestMat3x3_SubMat(t *testing.T) {
@@ -20,7 +20,7 @@ func TestMat3x3_Det(t *testing.T) {
 	m := New3x3(1, 2, 6, -5, 8, -4, 2, 6, 4)
 	got := m.Det()
 
-	if !tracer.ApproxEqual(-196, got) {
+	if !float.ApproxEqual(-196, got) {
 		t.Errorf("expected -196, got %g", got)
 	}
 }

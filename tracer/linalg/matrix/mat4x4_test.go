@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
 func TestMain(m *testing.M) {
@@ -24,9 +24,20 @@ func TestNew4x4(t *testing.T) {
 		col := i % 4
 		got := m[row][col]
 
-		if !tracer.ApproxEqual(e, got) {
+		if !float.ApproxEqual(e, got) {
 			t.Errorf("at (%d, %d), expected %g, got %g", row, col, e, got)
 		}
+	}
+}
+
+func TestNew4x4Trans(t *testing.T) {
+	trans := New4x4Translate(5, -3, 2)
+	p := New4x1(-3, 4, 5, 1)
+	exp := New4x1(2, 1, 7, 1)
+	got := trans.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
 	}
 }
 
@@ -130,7 +141,7 @@ func TestMat4x4_Det(t *testing.T) {
 	m := New4x4(-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9)
 	got := m.Det()
 
-	if !tracer.ApproxEqual(-4071, got) {
+	if !float.ApproxEqual(-4071, got) {
 		t.Errorf("expected -4071, got %g", got)
 	}
 }
@@ -157,19 +168,23 @@ func TestMat4x4_Inv(t *testing.T) {
 }
 
 func TestMat4x4_Inv2(t *testing.T) {
-	for {
-		a := New4x4(randomElements16()...)
-		b := New4x4(randomElements16()...)
-		c := a.Dot(b)
+Outer:
+	for i := 0; i < 1000; i++ {
+		for {
+			a := New4x4(randomElements16()...)
+			b := New4x4(randomElements16()...)
+			c := a.Dot(b)
 
-		if inv, err := b.Inv(); err == nil {
-			got := c.Dot(inv)
+			if inv, err := b.Inv(); err == nil {
+				got := c.Dot(inv)
 
-			if !a.Equal(got) {
-				t.Error(expectedGotErrorString(a, got))
+				if !a.Equal(got) {
+					t.Error(expectedGotErrorString(a, got))
+					break Outer
+				}
+
+				break
 			}
-
-			break
 		}
 	}
 }
@@ -186,7 +201,7 @@ func TestMatrix4x4_Equal(t *testing.T) {
 			c := *m
 			c[i][j] = m[i][j] + 1
 
-			if !c.Equal(m) {
+			if c.Equal(m) {
 				t.Errorf("at (%d, %d), %g not equal %g", i, j, m[i][j], c[i][j])
 			}
 		}

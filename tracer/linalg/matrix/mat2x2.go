@@ -3,7 +3,7 @@ package matrix
 import (
 	"fmt"
 
-	"github.com/MarioCdeS/romano/tracer"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
 type Mat2x2 [2][2]float64
@@ -32,10 +32,10 @@ func (m *Mat2x2) Det() float64 {
 }
 
 func (m *Mat2x2) Equal(oth *Mat2x2) bool {
-	return tracer.ApproxEqual(m[0][0], oth[0][0]) &&
-		tracer.ApproxEqual(m[0][1], oth[0][1]) &&
-		tracer.ApproxEqual(m[1][0], oth[1][0]) &&
-		tracer.ApproxEqual(m[1][1], oth[1][1])
+	return float.ApproxEqual(m[0][0], oth[0][0]) &&
+		float.ApproxEqual(m[0][1], oth[0][1]) &&
+		float.ApproxEqual(m[1][0], oth[1][0]) &&
+		float.ApproxEqual(m[1][1], oth[1][1])
 }
 
 func (m *Mat2x2) String() string {

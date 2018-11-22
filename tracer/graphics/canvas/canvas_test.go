@@ -1,19 +1,23 @@
 package canvas
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/MarioCdeS/romano/tracer/graphics/color"
+)
 
 var (
-	black *Color
-	red   *Color
+	black *color.Color
+	red   *color.Color
 )
 
 func init() {
-	black = NewColor(0, 0, 0, 0)
-	red = NewColor(1, 0, 0, 1)
+	black = color.New(0, 0, 0, 0)
+	red = color.New(1, 0, 0, 1)
 }
 
-func TestNewCanvas(t *testing.T) {
-	c := NewCanvas(10, 10)
+func TestNew(t *testing.T) {
+	c := New(10, 10)
 
 Outer:
 	for y := 0; y < c.height; y++ {
@@ -27,7 +31,7 @@ Outer:
 }
 
 func TestCanvas_At(t *testing.T) {
-	c := NewCanvas(5, 5)
+	c := New(5, 5)
 	at := c.At(0, 0)
 
 	if !at.Equal(black) {
@@ -36,7 +40,7 @@ func TestCanvas_At(t *testing.T) {
 }
 
 func TestCanvas_Set(t *testing.T) {
-	c := NewCanvas(5, 5)
+	c := New(5, 5)
 	c.Set(0, 0, red)
 
 	at := c.At(0, 0)

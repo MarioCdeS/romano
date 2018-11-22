@@ -13,6 +13,10 @@ func New(x, y, z float64) *Point {
 	return &Point{x, y, z, 1}
 }
 
+func From4x1(m *matrix.Mat4x1) *Point {
+	return (*Point)(m)
+}
+
 func (p *Point) X() float64 {
 	return p[0]
 }
@@ -39,6 +43,10 @@ func (p *Point) SubPoint(oth *Point) *vector.Vector {
 
 func (p *Point) Equal(oth *Point) bool {
 	return (*matrix.Mat4x1)(p).Equal((*matrix.Mat4x1)(oth))
+}
+
+func (p *Point) AsMat4x1() *matrix.Mat4x1 {
+	return (*matrix.Mat4x1)(p)
 }
 
 func (p *Point) String() string {
