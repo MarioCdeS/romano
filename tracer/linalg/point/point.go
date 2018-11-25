@@ -17,6 +17,11 @@ func From4x1(m *matrix.Mat4x1) *Point {
 	return (*Point)(m)
 }
 
+func (p *Point) Copy() *Point {
+	res := *p
+	return &res
+}
+
 func (p *Point) X() float64 {
 	return p[0]
 }

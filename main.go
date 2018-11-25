@@ -2,46 +2,30 @@ package main
 
 import (
 	"fmt"
-	"github.com/MarioCdeS/romano/tracer/graphics"
-	"github.com/MarioCdeS/romano/tracer/linalg"
 	"image/png"
 	"math"
 	"os"
+
+	"github.com/MarioCdeS/romano/tracer/graphics/canvas"
+	"github.com/MarioCdeS/romano/tracer/graphics/color"
+	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
+	"github.com/MarioCdeS/romano/tracer/linalg/point"
+	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
-type projectile struct {
-	position *linalg.Point
-	velocity *linalg.Vector
-}
-
-type world struct {
-	gravity *linalg.Vector
-	wind    *linalg.Vector
-}
-
 func main() {
-	p := projectile{
-		linalg.NewPoint(0, 1, 0),
-		linalg.NewVector(0.5, 1, 0).Normalized().Mul(10),
-	}
+	orig := point.New(400, 300, 0)
+	rotZ := matrix.New4x4RotateZ(math.Pi / 6)
+	white := color.New(1, 1, 1, 1)
+	tick := vector.New(200, 0, 0)
 
-	w := world{
-		linalg.NewVector(0, -0.1, 0),
-		linalg.NewVector(-0.01, 0, 0),
-	}
+	cnvs := canvas.New(800, 600)
+	cnvs.Clear(color.New(0, 0, 0, 1))
 
-	canvas := graphics.NewCanvas(800, 600)
-	canvas.Clear(graphics.NewColor(0, 0, 0, 1))
-
-	white := graphics.NewColor(1, 1, 1, 1)
-
-	for p.position.X() < float64(canvas.Width()) && p.position.Y() > 0 {
-		p.position = p.position.Add(p.velocity)
-		p.velocity = p.velocity.Add(w.gravity).Add(w.wind)
-
-		x := int(math.Floor(p.position.X()))
-		y := canvas.Height() - int(math.Floor(p.position.Y())) - 1
-		canvas.Set(x, y, white)
+	for i := 0; i < 12; i++ {
+		tickDot := orig.Copy().Add(tick)
+		cnvs.Set(int(tickDot.X()), int(tickDot.Y()), white)
+		tick = vector.From4x1(rotZ.Dot4x1(tick.AsMat4x1()))
 	}
 
 	f, err := os.Create("out.png")
@@ -53,7 +37,7 @@ func main() {
 
 	defer f.Close()
 
-	if err := png.Encode(f, canvas.ToImage()); err != nil {
+	if err := png.Encode(f, cnvs.ToImage()); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}

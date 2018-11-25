@@ -2,6 +2,7 @@ package matrix
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"os"
 	"testing"
@@ -30,11 +31,87 @@ func TestNew4x4(t *testing.T) {
 	}
 }
 
-func TestNew4x4Trans(t *testing.T) {
+func TestNew4x4Translate(t *testing.T) {
 	trans := New4x4Translate(5, -3, 2)
 	p := New4x1(-3, 4, 5, 1)
 	exp := New4x1(2, 1, 7, 1)
 	got := trans.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4Translate2(t *testing.T) {
+	trans := New4x4Translate(5, -3, 2)
+	v := New4x1(-3, 4, 5, 0)
+	got := trans.Dot4x1(v)
+
+	if !v.Equal(got) {
+		t.Error(expectedGotErrorString(v, got))
+	}
+}
+
+func TestNew4x4Scale(t *testing.T) {
+	scale := New4x4Scale(2, 3, 4)
+	p := New4x1(-4, 6, 8, 1)
+	exp := New4x1(-8, 18, 32, 1)
+	got := scale.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4Scale2(t *testing.T) {
+	scale := New4x4Scale(2, 3, 4)
+	v := New4x1(-4, 6, 8, 0)
+	exp := New4x1(-8, 18, 32, 0)
+	got := scale.Dot4x1(v)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4RotateX(t *testing.T) {
+	rot := New4x4RotateX(math.Pi / 4)
+	p := New4x1(0, 1, 0, 1)
+	exp := New4x1(0, math.Sqrt2/2, math.Sqrt2/2, 1)
+	got := rot.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4RotateY(t *testing.T) {
+	rot := New4x4RotateY(math.Pi / 4)
+	p := New4x1(0, 0, 1, 1)
+	exp := New4x1(math.Sqrt2/2, 0, math.Sqrt2/2, 1)
+	got := rot.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4RotateZ(t *testing.T) {
+	rot := New4x4RotateZ(math.Pi / 4)
+	p := New4x1(1, 0, 0, 1)
+	exp := New4x1(math.Sqrt2/2, math.Sqrt2/2, 0, 1)
+	got := rot.Dot4x1(p)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
+	}
+}
+
+func TestNew4x4Shear(t *testing.T) {
+	shear := New4x4Shear(1, 0, 0, 0, 0, 0)
+	p := New4x1(2, 3, 4)
+	exp := New4x1(5, 3, 4)
+	got := shear.Dot4x1(p)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))

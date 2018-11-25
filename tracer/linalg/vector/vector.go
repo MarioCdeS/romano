@@ -13,6 +13,10 @@ func New(x, y, z float64) *Vector {
 	return &Vector{x, y, z, 0}
 }
 
+func From4x1(m *matrix.Mat4x1) *Vector {
+	return (*Vector)(m)
+}
+
 func (v *Vector) Copy() *Vector {
 	res := *v
 	return &res
@@ -69,6 +73,10 @@ func (v *Vector) Magnitude() float64 {
 
 func (v *Vector) Normalized() *Vector {
 	return v.Div(v.Magnitude())
+}
+
+func (v *Vector) AsMat4x1() *matrix.Mat4x1 {
+	return (*matrix.Mat4x1)(v)
 }
 
 func (v *Vector) Equal(oth *Vector) bool {
