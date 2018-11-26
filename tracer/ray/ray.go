@@ -6,14 +6,14 @@ import (
 )
 
 type Ray struct {
-	origin    *point.Point
-	direction *vector.Vector
+	Origin    point.Point
+	Direction vector.Vector
 }
 
 func New(origin *point.Point, direction *vector.Vector) *Ray {
-	return &Ray{origin, direction.Normalized()}
+	return &Ray{*origin, *direction.Normalized()}
 }
 
 func (r *Ray) Position(t float64) *point.Point {
-	return r.origin.Copy().Add(r.direction.Copy().Mul(t))
+	return r.Origin.AddVector(r.Direction.Scale(t))
 }

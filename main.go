@@ -23,9 +23,9 @@ func main() {
 	cnvs.Clear(color.New(0, 0, 0, 1))
 
 	for i := 0; i < 12; i++ {
-		tickDot := orig.Copy().Add(tick)
-		cnvs.Set(int(tickDot.X()), int(tickDot.Y()), white)
-		tick = vector.From4x1(rotZ.Dot4x1(tick.AsMat4x1()))
+		tickDot := orig.AddVector(tick)
+		cnvs.Set(int(tickDot.X), int(tickDot.Y), white)
+		tick = rotZ.DotVector(tick)
 	}
 
 	f, err := os.Create("out.png")

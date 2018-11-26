@@ -75,10 +75,10 @@ func (c *Canvas) ToImage() image.Image {
 	for y := 0; y < c.height; y++ {
 		for x := 0; x < c.width; x++ {
 			col := &c.pixels[y][x]
-			r := float64ToUint8(col.R())
-			g := float64ToUint8(col.G())
-			b := float64ToUint8(col.B())
-			a := float64ToUint8(col.A())
+			r := float64ToUint8(col.R)
+			g := float64ToUint8(col.G)
+			b := float64ToUint8(col.B)
+			a := float64ToUint8(col.A)
 
 			img.SetNRGBA(x, y, color.NRGBA{r, g, b, a})
 		}

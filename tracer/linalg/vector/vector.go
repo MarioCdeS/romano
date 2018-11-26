@@ -85,7 +85,7 @@ func (v *Vector) Cross(oth *Vector) *Vector {
 }
 
 func (v *Vector) Magnitude() float64 {
-	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
+	return math.Sqrt(v.Dot(v))
 }
 
 func (v *Vector) Normalized() *Vector {
