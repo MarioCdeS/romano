@@ -19,8 +19,9 @@ func New(center *point.Point, radius float64) *Sphere {
 
 func (s *Sphere) Intersections(ray *ray.Ray) []float64 {
 	centerToRayOrig := ray.Origin.SubPoint(&s.center)
+	rayDir := ray.Direction()
 	// a = 1 in this case, because ray direction is a unit vector
-	b := 2 * ray.Direction.Dot(centerToRayOrig)
+	b := 2 * rayDir.Dot(centerToRayOrig)
 	c := centerToRayOrig.Dot(centerToRayOrig) - s.radius*s.radius
 	disc := b*b - 4*c
 
