@@ -3,10 +3,12 @@ package color
 import (
 	"fmt"
 
-	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
-type Color matrix.Mat4x1
+type Color struct {
+	R, G, B, A float64
+}
 
 func New(r, g, b, a float64) *Color {
 	return &Color{r, g, b, a}
@@ -17,42 +19,65 @@ func (c *Color) Copy() *Color {
 	return &res
 }
 
-func (c *Color) R() float64 {
-	return c[0]
-}
-
-func (c *Color) G() float64 {
-	return c[1]
-}
-
-func (c *Color) B() float64 {
-	return c[2]
-}
-
-func (c *Color) A() float64 {
-	return c[3]
-}
-
 func (c *Color) Add(oth *Color) *Color {
-	return (*Color)((*matrix.Mat4x1)(c).Add((*matrix.Mat4x1)(oth)))
+	return c.Copy().MutAdd(oth)
+}
+
+func (c *Color) MutAdd(oth *Color) *Color {
+	c.R += oth.R
+	c.G += oth.G
+	c.B += oth.B
+	c.A += oth.A
+
+	return c
 }
 
 func (c *Color) Sub(oth *Color) *Color {
-	return (*Color)((*matrix.Mat4x1)(c).Sub((*matrix.Mat4x1)(oth)))
+	return c.Copy().MutSub(oth)
 }
 
-func (c *Color) MulScalar(scalar float64) *Color {
-	return (*Color)((*matrix.Mat4x1)(c).Scale(scalar))
+func (c *Color) MutSub(oth *Color) *Color {
+	c.R -= oth.R
+	c.G -= oth.G
+	c.B -= oth.B
+	c.A -= oth.A
+
+	return c
 }
 
-func (c *Color) MulColor(oth *Color) *Color {
-	return (*Color)((*matrix.Mat4x1)(c).Hadamard((*matrix.Mat4x1)(oth)))
+func (c *Color) Scale(scalar float64) *Color {
+	return c.Copy().MutScale(scalar)
+}
+
+func (c *Color) MutScale(scalar float64) *Color {
+	c.R *= scalar
+	c.G *= scalar
+	c.B *= scalar
+	c.A *= scalar
+
+	return c
+}
+
+func (c *Color) Hadamard(oth *Color) *Color {
+	return c.Copy().MutHadamard(oth)
+}
+
+func (c *Color) MutHadamard(oth *Color) *Color {
+	c.R *= oth.R
+	c.G *= oth.G
+	c.B *= oth.B
+	c.A *= oth.A
+
+	return c
 }
 
 func (c *Color) Equal(oth *Color) bool {
-	return (*matrix.Mat4x1)(c).Equal((*matrix.Mat4x1)(oth))
+	return float.ApproxEqual(c.R, oth.R) &&
+		float.ApproxEqual(c.G, oth.G) &&
+		float.ApproxEqual(c.B, oth.B) &&
+		float.ApproxEqual(c.A, oth.A)
 }
 
 func (c *Color) String() string {
-	return fmt.Sprintf("C(%g, %g, %g, %g)", c[0], c[1], c[2], c[3])
+	return fmt.Sprintf("C(%g, %g, %g, %g)", c.R, c.G, c.B, c.A)
 }

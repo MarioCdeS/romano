@@ -2,13 +2,14 @@ package matrix
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"os"
 	"testing"
 	"time"
 
 	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/tracer/linalg/point"
+	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 func TestMain(m *testing.M) {
@@ -28,93 +29,6 @@ func TestNew4x4(t *testing.T) {
 		if !float.ApproxEqual(e, got) {
 			t.Errorf("at (%d, %d), expected %g, got %g", row, col, e, got)
 		}
-	}
-}
-
-func TestNew4x4Translate(t *testing.T) {
-	trans := New4x4Translate(5, -3, 2)
-	p := New4x1(-3, 4, 5, 1)
-	exp := New4x1(2, 1, 7, 1)
-	got := trans.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4Translate2(t *testing.T) {
-	trans := New4x4Translate(5, -3, 2)
-	v := New4x1(-3, 4, 5, 0)
-	got := trans.Dot4x1(v)
-
-	if !v.Equal(got) {
-		t.Error(expectedGotErrorString(v, got))
-	}
-}
-
-func TestNew4x4Scale(t *testing.T) {
-	scale := New4x4Scale(2, 3, 4)
-	p := New4x1(-4, 6, 8, 1)
-	exp := New4x1(-8, 18, 32, 1)
-	got := scale.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4Scale2(t *testing.T) {
-	scale := New4x4Scale(2, 3, 4)
-	v := New4x1(-4, 6, 8, 0)
-	exp := New4x1(-8, 18, 32, 0)
-	got := scale.Dot4x1(v)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4RotateX(t *testing.T) {
-	rot := New4x4RotateX(math.Pi / 4)
-	p := New4x1(0, 1, 0, 1)
-	exp := New4x1(0, math.Sqrt2/2, math.Sqrt2/2, 1)
-	got := rot.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4RotateY(t *testing.T) {
-	rot := New4x4RotateY(math.Pi / 4)
-	p := New4x1(0, 0, 1, 1)
-	exp := New4x1(math.Sqrt2/2, 0, math.Sqrt2/2, 1)
-	got := rot.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4RotateZ(t *testing.T) {
-	rot := New4x4RotateZ(math.Pi / 4)
-	p := New4x1(1, 0, 0, 1)
-	exp := New4x1(math.Sqrt2/2, math.Sqrt2/2, 0, 1)
-	got := rot.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
-	}
-}
-
-func TestNew4x4Shear(t *testing.T) {
-	shear := New4x4Shear(1, 0, 0, 0, 0, 0)
-	p := New4x1(2, 3, 4)
-	exp := New4x1(5, 3, 4)
-	got := shear.Dot4x1(p)
-
-	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
 	}
 }
 
@@ -187,18 +101,32 @@ func TestMat4x4_Dot(t *testing.T) {
 	}
 }
 
-func TestMat4x4_Dot4x1(t *testing.T) {
-	m1 := New4x4(randomElements16()...)
-	m2 := New4x1(randomElements4()...)
-	exp := New4x1()
+func TestMat4x4_DotVector(t *testing.T) {
+	m := New4x4(randomElements16()...)
+	v := vector.New(1, 2, 3)
+	exp := vector.New(
+		m[0][0]*v.X+m[0][1]*v.Y+m[0][2]*v.Z,
+		m[1][0]*v.X+m[1][1]*v.Y+m[1][2]*v.Z,
+		m[2][0]*v.X+m[2][1]*v.Y+m[2][2]*v.Z,
+	)
 
-	for i := 0; i < 4; i++ {
-		for j := 0; j < 4; j++ {
-			exp[i] += m1[i][j] * m2[j]
-		}
+	got := m.DotVector(v)
+
+	if !exp.Equal(got) {
+		t.Error(expectedGotErrorString(exp, got))
 	}
+}
 
-	got := m1.Dot4x1(m2)
+func TestMat4x4_DotPoint(t *testing.T) {
+	m := New4x4(randomElements16()...)
+	p := point.New(1, 2, 3)
+	exp := point.New(
+		m[0][0]*p.X+m[0][1]*p.Y+m[0][2]*p.Z+m[0][3],
+		m[1][0]*p.X+m[1][1]*p.Y+m[1][2]*p.Z+m[1][3],
+		m[2][0]*p.X+m[2][1]*p.Y+m[2][2]*p.Z+m[2][3],
+	)
+
+	got := m.DotPoint(p)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))

@@ -4,17 +4,15 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
+	"github.com/MarioCdeS/romano/tracer/float"
 )
 
-type Vector matrix.Mat4x1
-
-func New(x, y, z float64) *Vector {
-	return &Vector{x, y, z, 0}
+type Vector struct {
+	X, Y, Z float64
 }
 
-func From4x1(m *matrix.Mat4x1) *Vector {
-	return (*Vector)(m)
+func New(x, y, z float64) *Vector {
+	return &Vector{x, y, z}
 }
 
 func (v *Vector) Copy() *Vector {
@@ -22,67 +20,88 @@ func (v *Vector) Copy() *Vector {
 	return &res
 }
 
-func (v *Vector) X() float64 {
-	return v[0]
-}
-
-func (v *Vector) Y() float64 {
-	return v[1]
-}
-
-func (v *Vector) Z() float64 {
-	return v[2]
+func (v *Vector) W() float64 {
+	return 0
 }
 
 func (v *Vector) Add(oth *Vector) *Vector {
-	return (*Vector)((*matrix.Mat4x1)(v).Add((*matrix.Mat4x1)(oth)))
+	return v.Copy().MutAdd(oth)
+}
+
+func (v *Vector) MutAdd(oth *Vector) *Vector {
+	v.X += oth.X
+	v.Y += oth.Y
+	v.Z += oth.Z
+
+	return v
 }
 
 func (v *Vector) Sub(oth *Vector) *Vector {
-	return (*Vector)((*matrix.Mat4x1)(v).Sub((*matrix.Mat4x1)(oth)))
+	return v.Copy().MutSub(oth)
 }
 
-func (v *Vector) Mul(scalar float64) *Vector {
-	return (*Vector)((*matrix.Mat4x1)(v).Scale(scalar))
+func (v *Vector) MutSub(oth *Vector) *Vector {
+	v.X -= oth.X
+	v.Y -= oth.Y
+	v.Z -= oth.Z
+
+	return v
 }
 
-func (v *Vector) Div(scalar float64) *Vector {
-	return (*Vector)((*matrix.Mat4x1)(v).Scale(1.0 / scalar))
+func (v *Vector) Scale(scalar float64) *Vector {
+	return v.Copy().MutScale(scalar)
+}
+
+func (v *Vector) MutScale(scalar float64) *Vector {
+	v.X *= scalar
+	v.Y *= scalar
+	v.Z *= scalar
+
+	return v
 }
 
 func (v *Vector) Neg() *Vector {
-	return (*Vector)((*matrix.Mat4x1)(v).Scale(-1))
+	return v.Copy().MutNeg()
+}
+
+func (v *Vector) MutNeg() *Vector {
+	v.X = -v.X
+	v.Y = -v.Y
+	v.Z = -v.Z
+
+	return v
 }
 
 func (v *Vector) Dot(oth *Vector) float64 {
-	return (*matrix.Mat1x4)(v).Dot((*matrix.Mat4x1)(oth))
+	return v.X*oth.X + v.Y*oth.Y + v.Z*oth.Z
 }
 
 func (v *Vector) Cross(oth *Vector) *Vector {
 	return &Vector{
-		v[1]*oth[2] - v[2]*oth[1],
-		v[2]*oth[0] - v[0]*oth[2],
-		v[0]*oth[1] - v[1]*oth[0],
-		0,
+		X: v.Y*oth.Z - v.Z*oth.Y,
+		Y: v.Z*oth.X - v.X*oth.Z,
+		Z: v.X*oth.Y - v.Y*oth.X,
 	}
 }
 
 func (v *Vector) Magnitude() float64 {
-	return math.Sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2])
+	return math.Sqrt(v.X*v.X + v.Y*v.Y + v.Z*v.Z)
 }
 
 func (v *Vector) Normalized() *Vector {
-	return v.Div(v.Magnitude())
+	return v.Copy().MutNormalized()
 }
 
-func (v *Vector) AsMat4x1() *matrix.Mat4x1 {
-	return (*matrix.Mat4x1)(v)
+func (v *Vector) MutNormalized() *Vector {
+	return v.MutScale(1 / v.Magnitude())
 }
 
 func (v *Vector) Equal(oth *Vector) bool {
-	return (*matrix.Mat4x1)(v).Equal((*matrix.Mat4x1)(oth))
+	return float.ApproxEqual(v.X, oth.X) &&
+		float.ApproxEqual(v.Y, oth.Y) &&
+		float.ApproxEqual(v.Z, oth.Z)
 }
 
 func (v *Vector) String() string {
-	return fmt.Sprintf("V(%g, %g, %g)", v[0], v[1], v[2])
+	return fmt.Sprintf("V(%g, %g, %g)", v.X, v.Y, v.Z)
 }

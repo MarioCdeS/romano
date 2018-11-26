@@ -3,18 +3,16 @@ package point
 import (
 	"fmt"
 
-	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
+	"github.com/MarioCdeS/romano/tracer/float"
 	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
-type Point matrix.Mat4x1
-
-func New(x, y, z float64) *Point {
-	return &Point{x, y, z, 1}
+type Point struct {
+	X, Y, Z float64
 }
 
-func From4x1(m *matrix.Mat4x1) *Point {
-	return (*Point)(m)
+func New(x, y, z float64) *Point {
+	return &Point{x, y, z}
 }
 
 func (p *Point) Copy() *Point {
@@ -22,38 +20,44 @@ func (p *Point) Copy() *Point {
 	return &res
 }
 
-func (p *Point) X() float64 {
-	return p[0]
+func (p *Point) W() float64 {
+	return 1
 }
 
-func (p *Point) Y() float64 {
-	return p[1]
+func (p *Point) AddVector(v *vector.Vector) *Point {
+	return p.Copy().MutAddVector(v)
 }
 
-func (p *Point) Z() float64 {
-	return p[2]
-}
+func (p *Point) MutAddVector(v *vector.Vector) *Point {
+	p.X += v.X
+	p.Y += v.Y
+	p.Z += v.Z
 
-func (p *Point) Add(v *vector.Vector) *Point {
-	return (*Point)((*matrix.Mat4x1)(p).Add((*matrix.Mat4x1)(v)))
+	return p
 }
 
 func (p *Point) SubVector(v *vector.Vector) *Point {
-	return (*Point)((*matrix.Mat4x1)(p).Sub((*matrix.Mat4x1)(v)))
+	return p.Copy().MutSubVector(v)
+}
+
+func (p *Point) MutSubVector(v *vector.Vector) *Point {
+	p.X -= v.X
+	p.Y -= v.Y
+	p.Z -= v.Z
+
+	return p
 }
 
 func (p *Point) SubPoint(oth *Point) *vector.Vector {
-	return (*vector.Vector)((*matrix.Mat4x1)(p).Sub((*matrix.Mat4x1)(oth)))
+	return vector.New(p.X-oth.X, p.Y-oth.Y, p.Z-oth.Z)
 }
 
 func (p *Point) Equal(oth *Point) bool {
-	return (*matrix.Mat4x1)(p).Equal((*matrix.Mat4x1)(oth))
-}
-
-func (p *Point) AsMat4x1() *matrix.Mat4x1 {
-	return (*matrix.Mat4x1)(p)
+	return float.ApproxEqual(p.X, oth.X) &&
+		float.ApproxEqual(p.Y, oth.Y) &&
+		float.ApproxEqual(p.Z, oth.Z)
 }
 
 func (p *Point) String() string {
-	return fmt.Sprintf("P(%g, %g, %g)", p[0], p[1], p[2])
+	return fmt.Sprintf("P(%g, %g, %g)", p.X, p.Y, p.Z)
 }

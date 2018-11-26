@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/tracer/linalg/point"
+	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 type Mat4x4 [4][4]float64
@@ -126,15 +128,20 @@ func (m *Mat4x4) Dot(oth *Mat4x4) *Mat4x4 {
 	return res
 }
 
-func (m *Mat4x4) Dot4x1(oth *Mat4x1) *Mat4x1 {
-	res := New4x1()
+func (m *Mat4x4) DotVector(v *vector.Vector) *vector.Vector {
+	return vector.New(
+		m[0][0]*v.X+m[0][1]*v.Y+m[0][2]*v.Z,
+		m[1][0]*v.X+m[1][1]*v.Y+m[1][2]*v.Z,
+		m[2][0]*v.X+m[2][1]*v.Y+m[2][2]*v.Z,
+	)
+}
 
-	res[0] = m[0][0]*oth[0] + m[0][1]*oth[1] + m[0][2]*oth[2] + m[0][3]*oth[3]
-	res[1] = m[1][0]*oth[0] + m[1][1]*oth[1] + m[1][2]*oth[2] + m[1][3]*oth[3]
-	res[2] = m[2][0]*oth[0] + m[2][1]*oth[1] + m[2][2]*oth[2] + m[2][3]*oth[3]
-	res[3] = m[3][0]*oth[0] + m[3][1]*oth[1] + m[3][2]*oth[2] + m[3][3]*oth[3]
-
-	return res
+func (m *Mat4x4) DotPoint(p *point.Point) *point.Point {
+	return point.New(
+		m[0][0]*p.X+m[0][1]*p.Y+m[0][2]*p.Z+m[0][3],
+		m[1][0]*p.X+m[1][1]*p.Y+m[1][2]*p.Z+m[1][3],
+		m[2][0]*p.X+m[2][1]*p.Y+m[2][2]*p.Z+m[2][3],
+	)
 }
 
 func (m *Mat4x4) SubMat(i, j int) *Mat3x3 {
