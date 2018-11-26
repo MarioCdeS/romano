@@ -8,14 +8,14 @@ import (
 
 	"github.com/MarioCdeS/romano/tracer/graphics/canvas"
 	"github.com/MarioCdeS/romano/tracer/graphics/color"
-	"github.com/MarioCdeS/romano/tracer/linalg/matrix"
 	"github.com/MarioCdeS/romano/tracer/linalg/point"
+	"github.com/MarioCdeS/romano/tracer/linalg/transform"
 	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 func main() {
 	orig := point.New(400, 300, 0)
-	rotZ := matrix.New4x4RotateZ(math.Pi / 6)
+	rotZ := transform.NewRotateZ(math.Pi / 6)
 	white := color.New(1, 1, 1, 1)
 	tick := vector.New(200, 0, 0)
 

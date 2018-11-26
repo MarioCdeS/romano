@@ -3,7 +3,6 @@ package matrix
 import (
 	"errors"
 	"fmt"
-	"math"
 	"strings"
 
 	"github.com/MarioCdeS/romano/tracer/float"
@@ -34,72 +33,16 @@ func New4x4ID() *Mat4x4 {
 	}
 }
 
-func New4x4Translate(dx, dy, dz float64) *Mat4x4 {
-	return &Mat4x4{
-		{1, 0, 0, dx},
-		{0, 1, 0, dy},
-		{0, 0, 1, dz},
-		{0, 0, 0, 1},
-	}
-}
-
-func New4x4Scale(sx, sy, sz float64) *Mat4x4 {
-	return &Mat4x4{
-		{sx, 0, 0, 0},
-		{0, sy, 0, 0},
-		{0, 0, sz, 0},
-		{0, 0, 0, 1},
-	}
-}
-
-func New4x4RotateX(rad float64) *Mat4x4 {
-	sin, cos := math.Sincos(rad)
-
-	return &Mat4x4{
-		{1, 0, 0, 0},
-		{0, cos, -sin, 0},
-		{0, sin, cos, 0},
-		{0, 0, 0, 1},
-	}
-}
-
-func New4x4RotateY(rad float64) *Mat4x4 {
-	sin, cos := math.Sincos(rad)
-
-	return &Mat4x4{
-		{cos, 0, sin, 0},
-		{0, 1, 0, 0},
-		{-sin, 0, cos, 0},
-		{0, 0, 0, 1},
-	}
-}
-
-func New4x4RotateZ(rad float64) *Mat4x4 {
-	sin, cos := math.Sincos(rad)
-
-	return &Mat4x4{
-		{cos, -sin, 0, 0},
-		{sin, cos, 0, 0},
-		{0, 0, 1, 0},
-		{0, 0, 0, 1},
-	}
-}
-
-func New4x4Shear(xy, xz, yx, yz, zx, zy float64) *Mat4x4 {
-	return &Mat4x4{
-		{1, xy, xz, 0},
-		{yx, 1, yz, 0},
-		{zx, zy, 1, 0},
-		{0, 0, 0, 1},
-	}
-}
-
 func (m *Mat4x4) Copy() *Mat4x4 {
 	res := *m
 	return &res
 }
 
 func (m *Mat4x4) Add(oth *Mat4x4) *Mat4x4 {
+	return m.Copy().MutAdd(oth)
+}
+
+func (m *Mat4x4) MutAdd(oth *Mat4x4) *Mat4x4 {
 	m[0][0] += oth[0][0]
 	m[0][1] += oth[0][1]
 	m[0][2] += oth[0][2]
@@ -121,6 +64,10 @@ func (m *Mat4x4) Add(oth *Mat4x4) *Mat4x4 {
 }
 
 func (m *Mat4x4) Scale(scalar float64) *Mat4x4 {
+	return m.Copy().MutScale(scalar)
+}
+
+func (m *Mat4x4) MutScale(scalar float64) *Mat4x4 {
 	m[0][0] *= scalar
 	m[0][1] *= scalar
 	m[0][2] *= scalar
@@ -142,6 +89,10 @@ func (m *Mat4x4) Scale(scalar float64) *Mat4x4 {
 }
 
 func (m *Mat4x4) T() *Mat4x4 {
+	return m.Copy().MutT()
+}
+
+func (m *Mat4x4) MutT() *Mat4x4 {
 	m[0][1], m[1][0] = m[1][0], m[0][1]
 	m[0][2], m[2][0] = m[2][0], m[0][2]
 	m[0][3], m[3][0] = m[3][0], m[0][3]
