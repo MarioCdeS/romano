@@ -12,7 +12,8 @@ type Vector struct {
 }
 
 func (v Vector) Add(oth Vector) Vector {
-	return *v.MutAdd(oth)
+	v.MutAdd(oth)
+	return v
 }
 
 func (v *Vector) MutAdd(oth Vector) *Vector {
@@ -24,7 +25,8 @@ func (v *Vector) MutAdd(oth Vector) *Vector {
 }
 
 func (v Vector) Sub(oth Vector) Vector {
-	return *v.MutSub(oth)
+	v.MutSub(oth)
+	return v
 }
 
 func (v *Vector) MutSub(oth Vector) *Vector {
@@ -36,7 +38,8 @@ func (v *Vector) MutSub(oth Vector) *Vector {
 }
 
 func (v Vector) Scale(scalar float64) Vector {
-	return *v.MutScale(scalar)
+	v.MutScale(scalar)
+	return v
 }
 
 func (v *Vector) MutScale(scalar float64) *Vector {
@@ -48,7 +51,8 @@ func (v *Vector) MutScale(scalar float64) *Vector {
 }
 
 func (v Vector) Neg() Vector {
-	return *v.MutNeg()
+	v.MutNeg()
+	return v
 }
 
 func (v *Vector) MutNeg() *Vector {
@@ -76,7 +80,8 @@ func (v Vector) Magnitude() float64 {
 }
 
 func (v Vector) Normalized() Vector {
-	return *v.MutNormalized()
+	v.MutNormalized()
+	return v
 }
 
 func (v *Vector) MutNormalized() *Vector {

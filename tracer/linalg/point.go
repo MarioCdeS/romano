@@ -11,7 +11,8 @@ type Point struct {
 }
 
 func (p Point) AddVector(v Vector) Point {
-	return *p.MutAddVector(v)
+	p.MutAddVector(v)
+	return p
 }
 
 func (p *Point) MutAddVector(v Vector) *Point {
@@ -23,7 +24,8 @@ func (p *Point) MutAddVector(v Vector) *Point {
 }
 
 func (p Point) SubVector(v Vector) Point {
-	return *p.MutSubVector(v)
+	p.MutSubVector(v)
+	return p
 }
 
 func (p *Point) MutSubVector(v Vector) *Point {

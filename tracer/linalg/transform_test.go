@@ -1,18 +1,14 @@
-package transform
+package linalg
 
 import (
-	"fmt"
 	"math"
 	"testing"
-
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 func TestNewTranslate(t *testing.T) {
 	trans := NewTranslate(5, -3, 2)
-	p := point.New(-3, 4, 5)
-	exp := point.New(2, 1, 7)
+	p := Point{-3, 4, 5}
+	exp := Point{2, 1, 7}
 	got := trans.DotPoint(p)
 
 	if !exp.Equal(got) {
@@ -22,7 +18,7 @@ func TestNewTranslate(t *testing.T) {
 
 func TestNewTranslate2(t *testing.T) {
 	trans := NewTranslate(5, -3, 2)
-	v := vector.New(-3, 4, 5)
+	v := Vector{-3, 4, 5}
 	got := trans.DotVector(v)
 
 	if !v.Equal(got) {
@@ -32,8 +28,8 @@ func TestNewTranslate2(t *testing.T) {
 
 func TestNewScale(t *testing.T) {
 	scale := NewScale(2, 3, 4)
-	p := point.New(-4, 6, 8)
-	exp := point.New(-8, 18, 32)
+	p := Point{-4, 6, 8}
+	exp := Point{-8, 18, 32}
 	got := scale.DotPoint(p)
 
 	if !exp.Equal(got) {
@@ -43,8 +39,8 @@ func TestNewScale(t *testing.T) {
 
 func TestNewScale2(t *testing.T) {
 	scale := NewScale(2, 3, 4)
-	v := vector.New(-4, 6, 8)
-	exp := vector.New(-8, 18, 32)
+	v := Vector{-4, 6, 8}
+	exp := Vector{-8, 18, 32}
 	got := scale.DotVector(v)
 
 	if !exp.Equal(got) {
@@ -54,8 +50,8 @@ func TestNewScale2(t *testing.T) {
 
 func TestNewRotateX(t *testing.T) {
 	rot := NewRotateX(math.Pi / 4)
-	p := point.New(0, 1, 0)
-	exp := point.New(0, math.Sqrt2/2, math.Sqrt2/2)
+	p := Point{0, 1, 0}
+	exp := Point{0, math.Sqrt2 / 2, math.Sqrt2 / 2}
 	got := rot.DotPoint(p)
 
 	if !exp.Equal(got) {
@@ -65,8 +61,8 @@ func TestNewRotateX(t *testing.T) {
 
 func TestNewRotateY(t *testing.T) {
 	rot := NewRotateY(math.Pi / 4)
-	p := point.New(0, 0, 1)
-	exp := point.New(math.Sqrt2/2, 0, math.Sqrt2/2)
+	p := Point{0, 0, 1}
+	exp := Point{math.Sqrt2 / 2, 0, math.Sqrt2 / 2}
 	got := rot.DotPoint(p)
 
 	if !exp.Equal(got) {
@@ -76,8 +72,8 @@ func TestNewRotateY(t *testing.T) {
 
 func TestNewRotateZ(t *testing.T) {
 	rot := NewRotateZ(math.Pi / 4)
-	p := point.New(1, 0, 0)
-	exp := point.New(math.Sqrt2/2, math.Sqrt2/2, 0)
+	p := Point{1, 0, 0}
+	exp := Point{math.Sqrt2 / 2, math.Sqrt2 / 2, 0}
 	got := rot.DotPoint(p)
 
 	if !exp.Equal(got) {
@@ -87,15 +83,11 @@ func TestNewRotateZ(t *testing.T) {
 
 func TestNewShear(t *testing.T) {
 	shear := NewShear(1, 0, 0, 0, 0, 0)
-	p := point.New(2, 3, 4)
-	exp := point.New(5, 3, 4)
+	p := Point{2, 3, 4}
+	exp := Point{5, 3, 4}
 	got := shear.DotPoint(p)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
 	}
-}
-
-func expectedGotErrorString(exp, got fmt.Stringer) string {
-	return fmt.Sprintf("\nexpected:\n%s\ngot:\n%s", exp, got)
 }

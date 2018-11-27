@@ -8,8 +8,6 @@ import (
 	"time"
 
 	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 func TestMain(m *testing.M) {
@@ -103,12 +101,12 @@ func TestMat4x4_Dot(t *testing.T) {
 
 func TestMat4x4_DotVector(t *testing.T) {
 	m := NewMat4x4(randomElements16()...)
-	v := vector.New(1, 2, 3)
-	exp := vector.New(
-		m[0][0]*v.X+m[0][1]*v.Y+m[0][2]*v.Z,
-		m[1][0]*v.X+m[1][1]*v.Y+m[1][2]*v.Z,
-		m[2][0]*v.X+m[2][1]*v.Y+m[2][2]*v.Z,
-	)
+	v := Vector{1, 2, 3}
+	exp := Vector{
+		X: m[0][0]*v.X + m[0][1]*v.Y + m[0][2]*v.Z,
+		Y: m[1][0]*v.X + m[1][1]*v.Y + m[1][2]*v.Z,
+		Z: m[2][0]*v.X + m[2][1]*v.Y + m[2][2]*v.Z,
+	}
 
 	got := m.DotVector(v)
 
@@ -119,12 +117,12 @@ func TestMat4x4_DotVector(t *testing.T) {
 
 func TestMat4x4_DotPoint(t *testing.T) {
 	m := NewMat4x4(randomElements16()...)
-	p := point.New(1, 2, 3)
-	exp := point.New(
-		m[0][0]*p.X+m[0][1]*p.Y+m[0][2]*p.Z+m[0][3],
-		m[1][0]*p.X+m[1][1]*p.Y+m[1][2]*p.Z+m[1][3],
-		m[2][0]*p.X+m[2][1]*p.Y+m[2][2]*p.Z+m[2][3],
-	)
+	p := Point{1, 2, 3}
+	exp := Point{
+		X: m[0][0]*p.X + m[0][1]*p.Y + m[0][2]*p.Z + m[0][3],
+		Y: m[1][0]*p.X + m[1][1]*p.Y + m[1][2]*p.Z + m[1][3],
+		Z: m[2][0]*p.X + m[2][1]*p.Y + m[2][2]*p.Z + m[2][3],
+	}
 
 	got := m.DotPoint(p)
 

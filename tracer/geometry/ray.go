@@ -1,27 +1,24 @@
 package geometry
 
-import (
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
-)
+import "github.com/MarioCdeS/romano/tracer/linalg"
 
 type Ray struct {
-	Origin    point.Point
-	direction vector.Vector
+	Origin    linalg.Point
+	direction linalg.Vector
 }
 
-func NewRay(origin point.Point, direction vector.Vector) *Ray {
+func NewRay(origin linalg.Point, direction linalg.Vector) *Ray {
 	return &Ray{origin, direction.Normalized()}
 }
 
-func (r *Ray) Direction() vector.Vector {
+func (r *Ray) Direction() linalg.Vector {
 	return r.direction
 }
 
-func (r *Ray) SetDirection(direction *vector.Vector) {
-	r.direction = *direction.Normalized()
+func (r *Ray) SetDirection(direction linalg.Vector) {
+	r.direction = direction.Normalized()
 }
 
-func (r *Ray) Position(t float64) *point.Point {
+func (r *Ray) Position(t float64) linalg.Point {
 	return r.Origin.AddVector(r.direction.Scale(t))
 }

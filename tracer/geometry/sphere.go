@@ -4,20 +4,20 @@ import (
 	"math"
 
 	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
+	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
 type Sphere struct {
-	center point.Point
+	center linalg.Point
 	radius float64
 }
 
-func NewSphere(center *point.Point, radius float64) *Sphere {
-	return &Sphere{*center, radius}
+func NewSphere(center linalg.Point, radius float64) Sphere {
+	return Sphere{center, radius}
 }
 
-func (s *Sphere) Intersections(ray *Ray) []float64 {
-	centerToRayOrig := ray.Origin.SubPoint(&s.center)
+func (s Sphere) Intersections(ray *Ray) []float64 {
+	centerToRayOrig := ray.Origin.SubPoint(s.center)
 	rayDir := ray.Direction()
 	// a = 1 in this case, because ray direction is a unit vector
 	b := 2 * rayDir.Dot(centerToRayOrig)

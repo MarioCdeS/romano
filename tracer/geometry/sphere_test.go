@@ -4,13 +4,12 @@ import (
 	"testing"
 
 	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
+	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
 func TestSphere_Intersections(t *testing.T) {
-	r := NewRay(point.New(0, 1, -5), vector.New(0, 0, 1))
-	s := NewSphere(point.New(0, 0, 0), 1)
+	r := NewRay(linalg.Point{0, 1, -5}, linalg.Vector{0, 0, 1})
+	s := NewSphere(linalg.Point{0, 0, 0}, 1)
 	is := s.Intersections(r)
 
 	if len(is) != 1 {
@@ -24,8 +23,8 @@ func TestSphere_Intersections(t *testing.T) {
 }
 
 func TestSphere_Intersections2(t *testing.T) {
-	r := NewRay(point.New(0, 0, -5), vector.New(0, 0, 1))
-	s := NewSphere(point.New(0, 0, 0), 1)
+	r := NewRay(linalg.Point{0, 0, -5}, linalg.Vector{0, 0, 1})
+	s := NewSphere(linalg.Point{0, 0, 0}, 1)
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
@@ -43,8 +42,8 @@ func TestSphere_Intersections2(t *testing.T) {
 }
 
 func TestSphere_Intersections3(t *testing.T) {
-	r := NewRay(point.New(0, 2, -5), vector.New(0, 0, 1))
-	s := NewSphere(point.New(0, 0, 0), 1)
+	r := NewRay(linalg.Point{0, 2, -5}, linalg.Vector{0, 0, 1})
+	s := NewSphere(linalg.Point{0, 0, 0}, 1)
 	is := s.Intersections(r)
 
 	if len(is) > 0 {
@@ -54,8 +53,8 @@ func TestSphere_Intersections3(t *testing.T) {
 }
 
 func TestSphere_Intersections4(t *testing.T) {
-	r := NewRay(point.New(0, 0, 0), vector.New(0, 0, 1))
-	s := NewSphere(point.New(0, 0, 0), 1)
+	r := NewRay(linalg.Point{0, 0, 0}, linalg.Vector{0, 0, 1})
+	s := NewSphere(linalg.Point{0, 0, 0}, 1)
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
@@ -73,8 +72,8 @@ func TestSphere_Intersections4(t *testing.T) {
 }
 
 func TestSphere_Intersections5(t *testing.T) {
-	r := NewRay(point.New(0, 0, 5), vector.New(0, 0, 1))
-	s := NewSphere(point.New(0, 0, 0), 1)
+	r := NewRay(linalg.Point{0, 0, 5}, linalg.Vector{0, 0, 1})
+	s := NewSphere(linalg.Point{0, 0, 0}, 1)
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
