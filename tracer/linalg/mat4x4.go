@@ -1,4 +1,4 @@
-package matrix
+package linalg
 
 import (
 	"errors"
@@ -6,13 +6,11 @@ import (
 	"strings"
 
 	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
 )
 
 type Mat4x4 [4][4]float64
 
-func New4x4(elems ...float64) *Mat4x4 {
+func NewMat4x4(elems ...float64) *Mat4x4 {
 	if len(elems) > 16 {
 		panic("too many elements given")
 	}
@@ -26,7 +24,7 @@ func New4x4(elems ...float64) *Mat4x4 {
 	return &mat
 }
 
-func New4x4ID() *Mat4x4 {
+func NewMat4x4ID() *Mat4x4 {
 	return &Mat4x4{
 		{1, 0, 0, 0},
 		{0, 1, 0, 0},
@@ -106,7 +104,7 @@ func (m *Mat4x4) MutT() *Mat4x4 {
 }
 
 func (m *Mat4x4) Dot(oth *Mat4x4) *Mat4x4 {
-	res := New4x4()
+	var res Mat4x4
 
 	res[0][0] = m[0][0]*oth[0][0] + m[0][1]*oth[1][0] + m[0][2]*oth[2][0] + m[0][3]*oth[3][0]
 	res[0][1] = m[0][0]*oth[0][1] + m[0][1]*oth[1][1] + m[0][2]*oth[2][1] + m[0][3]*oth[3][1]
@@ -125,23 +123,23 @@ func (m *Mat4x4) Dot(oth *Mat4x4) *Mat4x4 {
 	res[3][2] = m[3][0]*oth[0][2] + m[3][1]*oth[1][2] + m[3][2]*oth[2][2] + m[3][3]*oth[3][2]
 	res[3][3] = m[3][0]*oth[0][3] + m[3][1]*oth[1][3] + m[3][2]*oth[2][3] + m[3][3]*oth[3][3]
 
-	return res
+	return &res
 }
 
-func (m *Mat4x4) DotVector(v *vector.Vector) *vector.Vector {
-	return vector.New(
-		m[0][0]*v.X+m[0][1]*v.Y+m[0][2]*v.Z,
-		m[1][0]*v.X+m[1][1]*v.Y+m[1][2]*v.Z,
-		m[2][0]*v.X+m[2][1]*v.Y+m[2][2]*v.Z,
-	)
+func (m *Mat4x4) DotVector(v Vector) Vector {
+	return Vector{
+		X: m[0][0]*v.X + m[0][1]*v.Y + m[0][2]*v.Z,
+		Y: m[1][0]*v.X + m[1][1]*v.Y + m[1][2]*v.Z,
+		Z: m[2][0]*v.X + m[2][1]*v.Y + m[2][2]*v.Z,
+	}
 }
 
-func (m *Mat4x4) DotPoint(p *point.Point) *point.Point {
-	return point.New(
-		m[0][0]*p.X+m[0][1]*p.Y+m[0][2]*p.Z+m[0][3],
-		m[1][0]*p.X+m[1][1]*p.Y+m[1][2]*p.Z+m[1][3],
-		m[2][0]*p.X+m[2][1]*p.Y+m[2][2]*p.Z+m[2][3],
-	)
+func (m *Mat4x4) DotPoint(p Point) Point {
+	return Point{
+		X: m[0][0]*p.X + m[0][1]*p.Y + m[0][2]*p.Z + m[0][3],
+		Y: m[1][0]*p.X + m[1][1]*p.Y + m[1][2]*p.Z + m[1][3],
+		Z: m[2][0]*p.X + m[2][1]*p.Y + m[2][2]*p.Z + m[2][3],
+	}
 }
 
 func (m *Mat4x4) SubMat(i, j int) *Mat3x3 {
@@ -153,7 +151,7 @@ func (m *Mat4x4) SubMat(i, j int) *Mat3x3 {
 		panic("column index out of bounds")
 	}
 
-	res := New3x3()
+	var res Mat3x3
 
 	for di, si := 0, 0; di < 3; di, si = di+1, si+1 {
 		if si == i {
@@ -169,7 +167,7 @@ func (m *Mat4x4) SubMat(i, j int) *Mat3x3 {
 		}
 	}
 
-	return res
+	return &res
 }
 
 func (m *Mat4x4) Minor(i, j int) float64 {
@@ -197,7 +195,7 @@ func (m *Mat4x4) Inv() (*Mat4x4, error) {
 		return nil, errors.New("matrix is not invertible")
 	}
 
-	res := New4x4()
+	var res Mat4x4
 
 	// Cofactors, transpose, and division by determinant in one
 	res[0][0] = m.Cofactor(0, 0) / det
@@ -217,7 +215,7 @@ func (m *Mat4x4) Inv() (*Mat4x4, error) {
 	res[3][2] = m.Cofactor(2, 3) / det
 	res[3][3] = m.Cofactor(3, 3) / det
 
-	return res, nil
+	return &res, nil
 }
 
 func (m *Mat4x4) Equal(oth *Mat4x4) bool {

@@ -1,4 +1,4 @@
-package matrix
+package linalg
 
 import (
 	"fmt"
@@ -17,9 +17,9 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-func TestNew4x4(t *testing.T) {
+func TestNewMat4x4(t *testing.T) {
 	elems := randomElements16()
-	m := New4x4(elems...)
+	m := NewMat4x4(elems...)
 
 	for i, e := range elems {
 		row := i / 4
@@ -41,8 +41,8 @@ func TestMat4x4_Add(t *testing.T) {
 		sums[i] = elems1[i] + elems2[i]
 	}
 
-	exp := New4x4(sums...)
-	got := New4x4(elems1...).Add(New4x4(elems2...))
+	exp := NewMat4x4(sums...)
+	got := NewMat4x4(elems1...).Add(NewMat4x4(elems2...))
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
@@ -57,8 +57,8 @@ func TestMat4x4_Scale(t *testing.T) {
 		scaled[i] = elems[i] * 5
 	}
 
-	exp := New4x4(scaled...)
-	got := New4x4(elems...).Scale(5)
+	exp := NewMat4x4(scaled...)
+	got := NewMat4x4(elems...).Scale(5)
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
@@ -73,8 +73,8 @@ func TestMat4x4_T(t *testing.T) {
 		transElems[(i%4)*4+(i/4)] = elems[i]
 	}
 
-	exp := New4x4(transElems...)
-	got := New4x4(elems...).T()
+	exp := NewMat4x4(transElems...)
+	got := NewMat4x4(elems...).T()
 
 	if !exp.Equal(got) {
 		t.Error(expectedGotErrorString(exp, got))
@@ -82,9 +82,9 @@ func TestMat4x4_T(t *testing.T) {
 }
 
 func TestMat4x4_Dot(t *testing.T) {
-	m1 := New4x4(randomElements16()...)
-	m2 := New4x4(randomElements16()...)
-	exp := New4x4()
+	m1 := NewMat4x4(randomElements16()...)
+	m2 := NewMat4x4(randomElements16()...)
+	exp := NewMat4x4()
 
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 4; j++ {
@@ -102,7 +102,7 @@ func TestMat4x4_Dot(t *testing.T) {
 }
 
 func TestMat4x4_DotVector(t *testing.T) {
-	m := New4x4(randomElements16()...)
+	m := NewMat4x4(randomElements16()...)
 	v := vector.New(1, 2, 3)
 	exp := vector.New(
 		m[0][0]*v.X+m[0][1]*v.Y+m[0][2]*v.Z,
@@ -118,7 +118,7 @@ func TestMat4x4_DotVector(t *testing.T) {
 }
 
 func TestMat4x4_DotPoint(t *testing.T) {
-	m := New4x4(randomElements16()...)
+	m := NewMat4x4(randomElements16()...)
 	p := point.New(1, 2, 3)
 	exp := point.New(
 		m[0][0]*p.X+m[0][1]*p.Y+m[0][2]*p.Z+m[0][3],
@@ -134,8 +134,8 @@ func TestMat4x4_DotPoint(t *testing.T) {
 }
 
 func TestMat4x4_Dot_Mat4x4ID(t *testing.T) {
-	m := New4x4(randomElements16()...)
-	got := m.Dot(New4x4ID())
+	m := NewMat4x4(randomElements16()...)
+	got := m.Dot(NewMat4x4ID())
 
 	if !m.Equal(got) {
 		t.Error(expectedGotErrorString(m, got))
@@ -143,7 +143,7 @@ func TestMat4x4_Dot_Mat4x4ID(t *testing.T) {
 }
 
 func TestMat4x4_Det(t *testing.T) {
-	m := New4x4(-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9)
+	m := NewMat4x4(-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9)
 	got := m.Det()
 
 	if !float.ApproxEqual(-4071, got) {
@@ -154,9 +154,9 @@ func TestMat4x4_Det(t *testing.T) {
 func TestMat4x4_Inv(t *testing.T) {
 	const det = 532
 
-	m := New4x4(-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4)
+	m := NewMat4x4(-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4)
 
-	exp := New4x4(
+	exp := NewMat4x4(
 		116, 240, 128, -24,
 		-430, -775, -236, 277,
 		-42, -119, -28, 105,
@@ -176,8 +176,8 @@ func TestMat4x4_Inv2(t *testing.T) {
 Outer:
 	for i := 0; i < 1000; i++ {
 		for {
-			a := New4x4(randomElements16()...)
-			b := New4x4(randomElements16()...)
+			a := NewMat4x4(randomElements16()...)
+			b := NewMat4x4(randomElements16()...)
 			c := a.Dot(b)
 
 			if inv, err := b.Inv(); err == nil {
@@ -195,7 +195,7 @@ Outer:
 }
 
 func TestMatrix4x4_Equal(t *testing.T) {
-	m := New4x4(randomElements16()...)
+	m := NewMat4x4(randomElements16()...)
 
 	if !m.Equal(m) {
 		t.Error("not reflexive")

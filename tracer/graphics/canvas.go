@@ -1,28 +1,26 @@
-package canvas
+package graphics
 
 import (
 	"image"
 	"image/color"
 	"math"
-
-	col "github.com/MarioCdeS/romano/tracer/graphics/color"
 )
 
 type Canvas struct {
 	width  int
 	height int
-	pixels [][]col.Color
+	pixels [][]Color
 }
 
-func New(width, height int) *Canvas {
+func NewCanvas(width, height int) *Canvas {
 	if width <= 0 || height <= 0 {
 		panic("invalid dimensions for canvas")
 	}
 
-	pixels := make([][]col.Color, height)
+	pixels := make([][]Color, height)
 
 	for i := 0; i < height; i++ {
-		pixels[i] = make([]col.Color, width)
+		pixels[i] = make([]Color, width)
 	}
 
 	return &Canvas{
@@ -40,7 +38,7 @@ func (c *Canvas) Height() int {
 	return c.height
 }
 
-func (c *Canvas) Clear(col *col.Color) {
+func (c *Canvas) Clear(col *Color) {
 	for y := 0; y < c.height; y++ {
 		for x := 0; x < c.width; x++ {
 			c.pixels[y][x] = *col
@@ -48,12 +46,12 @@ func (c *Canvas) Clear(col *col.Color) {
 	}
 }
 
-func (c *Canvas) At(x, y int) *col.Color {
+func (c *Canvas) At(x, y int) *Color {
 	col := c.pixels[y][x]
 	return &col
 }
 
-func (c *Canvas) Set(x, y int, col *col.Color) {
+func (c *Canvas) Set(x, y int, col *Color) {
 	if x < 0 || x >= c.width {
 		return
 	}

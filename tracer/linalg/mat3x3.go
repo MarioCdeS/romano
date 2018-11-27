@@ -1,8 +1,8 @@
-package matrix
+package linalg
 
 type Mat3x3 [3][3]float64
 
-func New3x3(elems ...float64) *Mat3x3 {
+func NewMat3x3(elems ...float64) *Mat3x3 {
 	if len(elems) > 9 {
 		panic("too many arguments")
 	}
@@ -30,7 +30,7 @@ func (m *Mat3x3) SubMat(i, j int) *Mat2x2 {
 		panic("column index out of bounds")
 	}
 
-	res := New2x2()
+	res := NewMat2x2()
 
 	for di, si := 0, 0; di < 2; di, si = di+1, si+1 {
 		if si == i {

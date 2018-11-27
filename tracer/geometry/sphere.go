@@ -1,11 +1,10 @@
-package sphere
+package geometry
 
 import (
 	"math"
 
 	"github.com/MarioCdeS/romano/tracer/float"
 	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/ray"
 )
 
 type Sphere struct {
@@ -13,11 +12,11 @@ type Sphere struct {
 	radius float64
 }
 
-func New(center *point.Point, radius float64) *Sphere {
+func NewSphere(center *point.Point, radius float64) *Sphere {
 	return &Sphere{*center, radius}
 }
 
-func (s *Sphere) Intersections(ray *ray.Ray) []float64 {
+func (s *Sphere) Intersections(ray *Ray) []float64 {
 	centerToRayOrig := ray.Origin.SubPoint(&s.center)
 	rayDir := ray.Direction()
 	// a = 1 in this case, because ray direction is a unit vector

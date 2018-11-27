@@ -1,4 +1,4 @@
-package matrix
+package linalg
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 
 type Mat2x2 [2][2]float64
 
-func New2x2(elems ...float64) *Mat2x2 {
+func NewMat2x2(elems ...float64) *Mat2x2 {
 	if len(elems) > 4 {
 		panic("too many arguments")
 	}

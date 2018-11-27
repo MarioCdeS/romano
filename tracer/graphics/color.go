@@ -1,4 +1,4 @@
-package color
+package graphics
 
 import (
 	"fmt"
@@ -8,10 +8,6 @@ import (
 
 type Color struct {
 	R, G, B, A float64
-}
-
-func New(r, g, b, a float64) *Color {
-	return &Color{r, g, b, a}
 }
 
 func (c *Color) Copy() *Color {
