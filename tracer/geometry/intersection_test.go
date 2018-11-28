@@ -7,8 +7,8 @@ import (
 )
 
 func TestHit(t *testing.T) {
-	r := NewRay(linalg.Point{0, 0, 0}, linalg.Vector{0, 0, 1})
-	var s Sphere
+	r := &Ray{linalg.Point{0, 0, 0}, linalg.Vector{0, 0, 1}}
+	s := NewSphere()
 	is := s.Intersections(r)
 	hit, ok := Hit(is)
 
@@ -23,8 +23,8 @@ func TestHit(t *testing.T) {
 }
 
 func TestHit2(t *testing.T) {
-	r := NewRay(linalg.Point{0, 2, -5}, linalg.Vector{0, 0, 1})
-	var s Sphere
+	r := &Ray{linalg.Point{0, 2, -5}, linalg.Vector{0, 0, 1}}
+	s := NewSphere()
 	is := s.Intersections(r)
 	_, ok := Hit(is)
 

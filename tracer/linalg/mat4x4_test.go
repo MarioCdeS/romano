@@ -149,7 +149,7 @@ func TestMat4x4_Det(t *testing.T) {
 	}
 }
 
-func TestMat4x4_Inv(t *testing.T) {
+func TestMat4x4_Inverse(t *testing.T) {
 	const det = 532
 
 	m := NewMat4x4(-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4)
@@ -161,7 +161,7 @@ func TestMat4x4_Inv(t *testing.T) {
 		-278, -433, -160, 163,
 	).Scale(1.0 / det)
 
-	got, err := m.Inv()
+	got, err := m.Inverse()
 
 	if err != nil {
 		t.Error(err)
@@ -178,7 +178,7 @@ Outer:
 			b := NewMat4x4(randomElements16()...)
 			c := a.Dot(b)
 
-			if inv, err := b.Inv(); err == nil {
+			if inv, err := b.Inverse(); err == nil {
 				got := c.Dot(inv)
 
 				if !a.Equal(got) {

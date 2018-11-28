@@ -188,7 +188,7 @@ func (m *Mat4x4) Det() float64 {
 	return m[0][0]*m.Cofactor(0, 0) + m[0][1]*m.Cofactor(0, 1) + m[0][2]*m.Cofactor(0, 2) + m[0][3]*m.Cofactor(0, 3)
 }
 
-func (m *Mat4x4) Inv() (*Mat4x4, error) {
+func (m *Mat4x4) Inverse() (*Mat4x4, error) {
 	det := m.Det()
 
 	if det == 0 {

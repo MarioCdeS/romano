@@ -7,10 +7,6 @@ type Ray struct {
 	Direction linalg.Vector
 }
 
-func NewRay(origin linalg.Point, direction linalg.Vector) *Ray {
-	return &Ray{origin, direction}
-}
-
 func (r *Ray) Position(t float64) linalg.Point {
 	return r.Origin.AddVector(r.Direction.Scale(t))
 }
