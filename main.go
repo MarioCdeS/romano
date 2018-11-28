@@ -6,25 +6,22 @@ import (
 	"math"
 	"os"
 
-	"github.com/MarioCdeS/romano/tracer/graphics/canvas"
-	"github.com/MarioCdeS/romano/tracer/graphics/color"
-	"github.com/MarioCdeS/romano/tracer/linalg/point"
-	"github.com/MarioCdeS/romano/tracer/linalg/transform"
-	"github.com/MarioCdeS/romano/tracer/linalg/vector"
+	"github.com/MarioCdeS/romano/tracer/graphics"
+	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
 func main() {
-	orig := point.New(400, 300, 0)
-	rotZ := transform.NewRotateZ(math.Pi / 6)
-	white := color.New(1, 1, 1, 1)
-	tick := vector.New(200, 0, 0)
+	orig := linalg.Point{400, 300, 0}
+	rotZ := linalg.NewRotateZ(math.Pi / 6)
+	white := graphics.Color{1, 1, 1, 1}
+	tick := linalg.Vector{200, 0, 0}
 
-	cnvs := canvas.New(800, 600)
-	cnvs.Clear(color.New(0, 0, 0, 1))
+	cnvs := graphics.NewCanvas(800, 600)
+	cnvs.Clear(graphics.Color{0, 0, 0, 1})
 
 	for i := 0; i < 12; i++ {
-		tickDot := orig.AddVector(tick)
-		cnvs.Set(int(tickDot.X), int(tickDot.Y), white)
+		tickPoint := orig.AddVector(tick)
+		cnvs.Set(int(tickPoint.X), int(tickPoint.Y), white)
 		tick = rotZ.DotVector(tick)
 	}
 

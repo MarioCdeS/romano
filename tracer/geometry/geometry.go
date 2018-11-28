@@ -1,5 +1,5 @@
 package geometry
 
-type Geometry interface {
-	Intersections(ray Ray) []float64
-}
+import "github.com/MarioCdeS/romano/tracer/linalg"
+
+var WorldOrigin = linalg.Point{0, 0, 0}

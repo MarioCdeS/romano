@@ -4,36 +4,27 @@ import (
 	"math"
 
 	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg"
 )
 
-type Sphere struct {
-	center linalg.Point
-	radius float64
-}
+type Sphere struct{}
 
-func NewSphere(center linalg.Point, radius float64) Sphere {
-	return Sphere{center, radius}
-}
-
-func (s Sphere) Intersections(ray *Ray) []float64 {
-	centerToRayOrig := ray.Origin.SubPoint(s.center)
-	rayDir := ray.Direction()
-	// a = 1 in this case, because ray direction is a unit vector
-	b := 2 * rayDir.Dot(centerToRayOrig)
-	c := centerToRayOrig.Dot(centerToRayOrig) - s.radius*s.radius
-	disc := b*b - 4*c
+func (s Sphere) Intersections(ray *Ray) []Intersection {
+	centerToRayOrig := ray.Origin.SubPoint(WorldOrigin) // Sphere center is at origin
+	a := ray.Direction.Dot(ray.Direction)
+	b := 2 * ray.Direction.Dot(centerToRayOrig)
+	c := centerToRayOrig.Dot(centerToRayOrig) - 1 // Sphere radius is 1
+	disc := b*b - 4*a*c
 
 	if disc < 0 {
 		return nil
 	}
 
-	res := make([]float64, 1, 2)
 	sqrtDisc := math.Sqrt(disc)
-	res[0] = (-b - sqrtDisc) / 2
+	res := make([]Intersection, 1, 2)
+	res[0] = NewIntersection((-b-sqrtDisc)/2, s)
 
 	if !float.ApproxEqual(disc, 0) {
-		res = append(res, (-b+sqrtDisc)/2)
+		res = append(res, NewIntersection((-b+sqrtDisc)/2, s))
 	}
 
 	return res
