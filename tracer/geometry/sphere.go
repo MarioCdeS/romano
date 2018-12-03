@@ -36,8 +36,8 @@ func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {
 
 func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	ray = ray.Transform(s.invTransform)
-	centerToRayOrig := ray.Origin.SubPoint(WorldOrigin) // Sphere center is at origin
-	a := ray.Direction.Dot(ray.Direction)
+	centerToRayOrig := ray.Origin.SubPoint(&WorldOrigin) // Sphere center is at origin
+	a := ray.Direction.Dot(&ray.Direction)
 	b := 2 * ray.Direction.Dot(centerToRayOrig)
 	c := centerToRayOrig.Dot(centerToRayOrig) - 1 // Sphere radius is 1
 	disc := b*b - 4*a*c

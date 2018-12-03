@@ -11,12 +11,11 @@ type Vector struct {
 	X, Y, Z float64
 }
 
-func (v Vector) Add(oth Vector) Vector {
-	v.MutAdd(oth)
-	return v
+func (v Vector) Add(oth *Vector) *Vector {
+	return v.MutAdd(oth)
 }
 
-func (v *Vector) MutAdd(oth Vector) *Vector {
+func (v *Vector) MutAdd(oth *Vector) *Vector {
 	v.X += oth.X
 	v.Y += oth.Y
 	v.Z += oth.Z
@@ -24,12 +23,11 @@ func (v *Vector) MutAdd(oth Vector) *Vector {
 	return v
 }
 
-func (v Vector) Sub(oth Vector) Vector {
-	v.MutSub(oth)
-	return v
+func (v Vector) Sub(oth *Vector) *Vector {
+	return v.MutSub(oth)
 }
 
-func (v *Vector) MutSub(oth Vector) *Vector {
+func (v *Vector) MutSub(oth *Vector) *Vector {
 	v.X -= oth.X
 	v.Y -= oth.Y
 	v.Z -= oth.Z
@@ -37,9 +35,8 @@ func (v *Vector) MutSub(oth Vector) *Vector {
 	return v
 }
 
-func (v Vector) Scale(scalar float64) Vector {
-	v.MutScale(scalar)
-	return v
+func (v Vector) Scale(scalar float64) *Vector {
+	return v.MutScale(scalar)
 }
 
 func (v *Vector) MutScale(scalar float64) *Vector {
@@ -50,9 +47,8 @@ func (v *Vector) MutScale(scalar float64) *Vector {
 	return v
 }
 
-func (v Vector) Neg() Vector {
-	v.MutNeg()
-	return v
+func (v Vector) Neg() *Vector {
+	return v.MutNeg()
 }
 
 func (v *Vector) MutNeg() *Vector {
@@ -63,37 +59,40 @@ func (v *Vector) MutNeg() *Vector {
 	return v
 }
 
-func (v Vector) Dot(oth Vector) float64 {
+func (v *Vector) Dot(oth *Vector) float64 {
 	return v.X*oth.X + v.Y*oth.Y + v.Z*oth.Z
 }
 
-func (v Vector) Cross(oth Vector) Vector {
-	return Vector{
+func (v *Vector) Cross(oth *Vector) *Vector {
+	return &Vector{
 		X: v.Y*oth.Z - v.Z*oth.Y,
 		Y: v.Z*oth.X - v.X*oth.Z,
 		Z: v.X*oth.Y - v.Y*oth.X,
 	}
 }
 
-func (v Vector) Magnitude() float64 {
-	return math.Sqrt(v.Dot(v))
+func (v *Vector) SquaredMagnitude() float64 {
+	return v.Dot(v)
 }
 
-func (v Vector) Normalized() Vector {
-	v.MutNormalized()
-	return v
+func (v *Vector) Magnitude() float64 {
+	return math.Sqrt(v.SquaredMagnitude())
+}
+
+func (v Vector) Normalized() *Vector {
+	return v.MutNormalized()
 }
 
 func (v *Vector) MutNormalized() *Vector {
 	return v.MutScale(1 / v.Magnitude())
 }
 
-func (v Vector) Equal(oth Vector) bool {
+func (v *Vector) Equal(oth *Vector) bool {
 	return float.ApproxEqual(v.X, oth.X) &&
 		float.ApproxEqual(v.Y, oth.Y) &&
 		float.ApproxEqual(v.Z, oth.Z)
 }
 
-func (v Vector) String() string {
+func (v *Vector) String() string {
 	return fmt.Sprintf("V(%g, %g, %g)", v.X, v.Y, v.Z)
 }

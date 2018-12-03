@@ -1,7 +1,6 @@
 package linalg
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
@@ -126,16 +125,16 @@ func (m *Mat4x4) Dot(oth *Mat4x4) *Mat4x4 {
 	return &res
 }
 
-func (m *Mat4x4) DotVector(v Vector) Vector {
-	return Vector{
+func (m *Mat4x4) DotVector(v *Vector) *Vector {
+	return &Vector{
 		X: m[0][0]*v.X + m[0][1]*v.Y + m[0][2]*v.Z,
 		Y: m[1][0]*v.X + m[1][1]*v.Y + m[1][2]*v.Z,
 		Z: m[2][0]*v.X + m[2][1]*v.Y + m[2][2]*v.Z,
 	}
 }
 
-func (m *Mat4x4) DotPoint(p Point) Point {
-	return Point{
+func (m *Mat4x4) DotPoint(p *Point) *Point {
+	return &Point{
 		X: m[0][0]*p.X + m[0][1]*p.Y + m[0][2]*p.Z + m[0][3],
 		Y: m[1][0]*p.X + m[1][1]*p.Y + m[1][2]*p.Z + m[1][3],
 		Z: m[2][0]*p.X + m[2][1]*p.Y + m[2][2]*p.Z + m[2][3],
@@ -192,7 +191,7 @@ func (m *Mat4x4) Inverse() (*Mat4x4, error) {
 	det := m.Det()
 
 	if det == 0 {
-		return nil, errors.New("matrix is not invertible")
+		return nil, fmt.Errorf("matrix is not invertible\n%s", m)
 	}
 
 	var res Mat4x4

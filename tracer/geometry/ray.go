@@ -7,13 +7,13 @@ type Ray struct {
 	Direction linalg.Vector
 }
 
-func (r *Ray) Position(t float64) linalg.Point {
+func (r *Ray) Position(t float64) *linalg.Point {
 	return r.Origin.AddVector(r.Direction.Scale(t))
 }
 
 func (r *Ray) Transform(t *linalg.Mat4x4) *Ray {
 	return &Ray{
-		Origin:    t.DotPoint(r.Origin),
-		Direction: t.DotVector(r.Direction),
+		Origin:    *t.DotPoint(&r.Origin),
+		Direction: *t.DotVector(&r.Direction),
 	}
 }
