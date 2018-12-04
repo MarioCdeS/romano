@@ -39,7 +39,7 @@ func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {
 
 func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	ray = ray.Transform(&s.invTransform)
-	centerToRayOrig := ray.Origin.SubPoint(&Origin) // Sphere center is at origin
+	centerToRayOrig := ray.Origin.SubPoint(Origin()) // Sphere center is at origin
 	a := ray.Direction.Dot(&ray.Direction)
 	b := 2 * ray.Direction.Dot(centerToRayOrig)
 	c := centerToRayOrig.Dot(centerToRayOrig) - 1 // Sphere radius is 1
@@ -60,7 +60,6 @@ func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	return res
 }
 
-func (s *Sphere) NormalAt(p *linalg.Point) (*linalg.Vector, bool) {
-	res := s.invTransform.DotPoint(p).SubPoint(&Origin)
-	return res, float.ApproxEqual(res.SquaredMagnitude(), 1)
+func (s *Sphere) NormalAt(p *linalg.Point) *linalg.Vector {
+	return s.invTransform.T().DotVector(s.invTransform.DotPoint(p).SubPoint(Origin())).MutNormalized()
 }

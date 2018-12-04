@@ -31,10 +31,10 @@ func main() {
 		yAxis = lin.Vector{0, ratio, 0}
 	}
 
-	center := geom.Origin.AddVector(xAxis.Scale(0.5)).MutAddVector(yAxis.Scale(0.5))
+	center := geom.Origin().MutAddVector(xAxis.Scale(0.5)).MutAddVector(yAxis.Scale(0.5))
 	cam := center.AddVector(&lin.Vector{0, 0, -1})
 
-	spherePos := center.AddVector(&lin.Vector{0, 0, 2}).SubPoint(&geom.Origin)
+	spherePos := center.AddVector(&lin.Vector{0, 0, 2}).SubPoint(geom.Origin())
 	sphere, err := geom.NewTransformedSphere(
 		lin.NewTranslateFromVec(spherePos).Dot(lin.NewUniformScale(1.1)),
 	)
@@ -53,8 +53,8 @@ func main() {
 		rayDirY := yAxis.Scale(float64(y) * yTick)
 
 		for x := 0; x < cnvs.Width(); x++ {
-			rayDir := geom.Origin.
-				AddVector(xAxis.Scale(float64(x) * xTick)).
+			rayDir := geom.Origin().
+				MutAddVector(xAxis.Scale(float64(x) * xTick)).
 				MutAddVector(rayDirY).
 				SubPoint(cam)
 			ray := geom.Ray{Origin: *cam, Direction: *rayDir}

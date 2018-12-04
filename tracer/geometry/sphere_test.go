@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"math"
 	"testing"
 
 	"github.com/MarioCdeS/romano/tracer/float"
@@ -138,12 +139,41 @@ func TestSphere_Intersections7(t *testing.T) {
 func TestSphere_NormalAt(t *testing.T) {
 	s := NewSphere()
 	exp := linalg.Vector{1, 0, 0}
+	got := s.NormalAt(&linalg.Point{1, 0, 0})
 
-	if got, ok := s.NormalAt(&linalg.Point{1, 0, 0}); ok {
-		if !exp.Equal(got) {
-			t.Errorf("expected %v, got %v", exp, *got)
-		}
-	} else {
-		t.Error("point is not on sphere")
+	if !exp.Equal(got) {
+		t.Errorf("expected %s, got %s", &exp, got)
+	}
+}
+
+func TestSphere_NormalAt2(t *testing.T) {
+	s, err := NewTransformedSphere(linalg.NewTranslate(0, 1, 0))
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	exp := linalg.Vector{0, 0.7071067811865475, -0.7071067811865476}
+	got := s.NormalAt(&linalg.Point{0, 1.70711, -0.70711})
+
+	if !exp.Equal(got) {
+		t.Errorf("expected %s, got %s", &exp, got)
+	}
+}
+
+func TestSphere_NormalAt3(t *testing.T) {
+	s, err := NewTransformedSphere(linalg.NewScale(1, 0.5, 1).Dot(linalg.NewRotateZ(math.Pi / 5)))
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	exp := linalg.Vector{0, 0.9701425001453319, -0.2425356250363329}
+	got := s.NormalAt(&linalg.Point{0, math.Sqrt2 / 2, -math.Sqrt2 / 2})
+
+	if !exp.Equal(got) {
+		t.Errorf("expected %s, got %s", &exp, got)
 	}
 }
