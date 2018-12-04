@@ -3,35 +3,46 @@ package main
 import (
 	"fmt"
 	"image/png"
-	"math"
 	"os"
 
-	"github.com/MarioCdeS/romano/tracer/geometry"
-	"github.com/MarioCdeS/romano/tracer/graphics"
-	"github.com/MarioCdeS/romano/tracer/linalg"
+	geom "github.com/MarioCdeS/romano/tracer/geometry"
+	gfx "github.com/MarioCdeS/romano/tracer/graphics"
+	lin "github.com/MarioCdeS/romano/tracer/linalg"
 )
 
 func main() {
-	cnvs := graphics.NewCanvas(800, 600)
-	black := graphics.Color{0, 0, 0, 1}
+	cnvs := gfx.NewCanvas(640, 480)
+	red := gfx.Color{1, 0, 0, 1}
+	black := gfx.Color{0, 0, 0, 1}
 
-	cam := linalg.Point{4, 3, -5}
-	orig := linalg.Point{0, 0, 0}
-	xAxis := linalg.Vector{8, 0, 0}
-	yAxis := linalg.Vector{0, 6, 0}
 	xTick := 1 / float64(cnvs.Width())
 	yTick := 1 / float64(cnvs.Height())
 
-	var squaredDistToCanv float64
+	var xAxis lin.Vector
+	var yAxis lin.Vector
 
-	{
-		center := orig.
-			AddVector(xAxis.Scale(0.5)).
-			MutAddVector(yAxis.Scale(0.5))
-		squaredDistToCanv = center.SubPoint(&cam).SquaredMagnitude()
+	if cnvs.Width() > cnvs.Height() {
+		ratio := float64(cnvs.Width()) / float64(cnvs.Height())
+		xAxis = lin.Vector{ratio, 0, 0}
+		yAxis = lin.Vector{0, 1, 0}
+	} else {
+		ratio := float64(cnvs.Height()) / float64(cnvs.Width())
+		xAxis = lin.Vector{1, 0, 0}
+		yAxis = lin.Vector{0, ratio, 0}
 	}
 
-	sphere, err := geometry.NewTransformedSphere(linalg.NewTranslate(4, 3, 3).Dot(linalg.NewScale(3, 3, 3)))
+	center := geom.Origin.AddVector(xAxis.Scale(0.5)).MutAddVector(yAxis.Scale(0.5))
+	cam := center.AddVector(&lin.Vector{0, 0, -1})
+
+	spherePos := center.AddVector(&lin.Vector{0, 0, 2}).SubPoint(&geom.Origin)
+	sphere, err := geom.NewTransformedSphere(
+		lin.NewTranslateFromVec(spherePos).Dot(lin.NewUniformScale(1.1)),
+	)
+	/*
+		sphere, err := geometry.NewTransformedSphere(
+			lin.NewTranslateFromVec(spherePos).Dot(lin.NewShear(1, 0, 0, 0, 0, 0)),
+		)
+	*/
 
 	if err != nil {
 		fmt.Println(err)
@@ -39,22 +50,18 @@ func main() {
 	}
 
 	for y := 0; y < cnvs.Height(); y++ {
-		for x := 0; x < cnvs.Width(); x++ {
-			rayDir := orig.
-				AddVector(xAxis.Scale(float64(x) * xTick)).
-				MutAddVector(yAxis.Scale(float64(y) * yTick)).
-				SubPoint(&cam)
-			ray := geometry.Ray{Origin: cam, Direction: *rayDir}
-			var col graphics.Color
+		rayDirY := yAxis.Scale(float64(y) * yTick)
 
-			if hit, ok := geometry.Hit(sphere.Intersections(&ray)); ok {
-				squaredDistToHit := ray.Direction.Scale(hit.T).SquaredMagnitude()
-				col = graphics.Color{
-					R: 0,
-					G: math.Min(math.Max(2-(squaredDistToHit/squaredDistToCanv), 0), 1),
-					B: 0,
-					A: 1,
-				}
+		for x := 0; x < cnvs.Width(); x++ {
+			rayDir := geom.Origin.
+				AddVector(xAxis.Scale(float64(x) * xTick)).
+				MutAddVector(rayDirY).
+				SubPoint(cam)
+			ray := geom.Ray{Origin: *cam, Direction: *rayDir}
+			var col gfx.Color
+
+			if _, ok := geom.Hit(sphere.Intersections(&ray)); ok {
+				col = red
 			} else {
 				col = black
 			}

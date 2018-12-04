@@ -134,3 +134,16 @@ func TestSphere_Intersections7(t *testing.T) {
 		t.Errorf("unexpected number of intersections (%d)", len(is))
 	}
 }
+
+func TestSphere_NormalAt(t *testing.T) {
+	s := NewSphere()
+	exp := linalg.Vector{1, 0, 0}
+
+	if got, ok := s.NormalAt(&linalg.Point{1, 0, 0}); ok {
+		if !exp.Equal(got) {
+			t.Errorf("expected %v, got %v", exp, *got)
+		}
+	} else {
+		t.Error("point is not on sphere")
+	}
+}

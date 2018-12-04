@@ -32,13 +32,8 @@ func NewMat4x4ID() *Mat4x4 {
 	}
 }
 
-func (m *Mat4x4) Copy() *Mat4x4 {
-	res := *m
-	return &res
-}
-
-func (m *Mat4x4) Add(oth *Mat4x4) *Mat4x4 {
-	return m.Copy().MutAdd(oth)
+func (m Mat4x4) Add(oth *Mat4x4) *Mat4x4 {
+	return m.MutAdd(oth)
 }
 
 func (m *Mat4x4) MutAdd(oth *Mat4x4) *Mat4x4 {
@@ -62,8 +57,8 @@ func (m *Mat4x4) MutAdd(oth *Mat4x4) *Mat4x4 {
 	return m
 }
 
-func (m *Mat4x4) Scale(scalar float64) *Mat4x4 {
-	return m.Copy().MutScale(scalar)
+func (m Mat4x4) Scale(scalar float64) *Mat4x4 {
+	return m.MutScale(scalar)
 }
 
 func (m *Mat4x4) MutScale(scalar float64) *Mat4x4 {
@@ -87,8 +82,8 @@ func (m *Mat4x4) MutScale(scalar float64) *Mat4x4 {
 	return m
 }
 
-func (m *Mat4x4) T() *Mat4x4 {
-	return m.Copy().MutT()
+func (m Mat4x4) T() *Mat4x4 {
+	return m.MutT()
 }
 
 func (m *Mat4x4) MutT() *Mat4x4 {

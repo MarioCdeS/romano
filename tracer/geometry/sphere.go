@@ -8,11 +8,13 @@ import (
 )
 
 type Sphere struct {
-	invTransform *linalg.Mat4x4
+	transform    linalg.Mat4x4
+	invTransform linalg.Mat4x4
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{linalg.NewMat4x4ID()}
+	id := linalg.NewMat4x4ID()
+	return &Sphere{*id, *id}
 }
 
 func NewTransformedSphere(transform *linalg.Mat4x4) (*Sphere, error) {
@@ -27,7 +29,8 @@ func NewTransformedSphere(transform *linalg.Mat4x4) (*Sphere, error) {
 
 func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {
 	if inv, err := transform.Inverse(); err == nil {
-		s.invTransform = inv
+		s.transform = *transform
+		s.invTransform = *inv
 		return nil
 	} else {
 		return err
@@ -35,8 +38,8 @@ func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {
 }
 
 func (s *Sphere) Intersections(ray *Ray) []Intersection {
-	ray = ray.Transform(s.invTransform)
-	centerToRayOrig := ray.Origin.SubPoint(&WorldOrigin) // Sphere center is at origin
+	ray = ray.Transform(&s.invTransform)
+	centerToRayOrig := ray.Origin.SubPoint(&Origin) // Sphere center is at origin
 	a := ray.Direction.Dot(&ray.Direction)
 	b := 2 * ray.Direction.Dot(centerToRayOrig)
 	c := centerToRayOrig.Dot(centerToRayOrig) - 1 // Sphere radius is 1
@@ -55,4 +58,9 @@ func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	}
 
 	return res
+}
+
+func (s *Sphere) NormalAt(p *linalg.Point) (*linalg.Vector, bool) {
+	res := s.invTransform.DotPoint(p).SubPoint(&Origin)
+	return res, float.ApproxEqual(res.SquaredMagnitude(), 1)
 }

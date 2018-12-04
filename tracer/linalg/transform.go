@@ -11,6 +11,10 @@ func NewTranslate(dx, dy, dz float64) *Mat4x4 {
 	}
 }
 
+func NewTranslateFromVec(v *Vector) *Mat4x4 {
+	return NewTranslate(v.X, v.Y, v.Z)
+}
+
 func NewScale(sx, sy, sz float64) *Mat4x4 {
 	return &Mat4x4{
 		{sx, 0, 0, 0},
@@ -18,6 +22,10 @@ func NewScale(sx, sy, sz float64) *Mat4x4 {
 		{0, 0, sz, 0},
 		{0, 0, 0, 1},
 	}
+}
+
+func NewUniformScale(s float64) *Mat4x4 {
+	return NewScale(s, s, s)
 }
 
 func NewRotateX(rad float64) *Mat4x4 {
