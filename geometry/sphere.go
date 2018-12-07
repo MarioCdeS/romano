@@ -3,28 +3,40 @@ package geometry
 import (
 	"math"
 
-	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg"
+	"github.com/MarioCdeS/romano/float"
+	"github.com/MarioCdeS/romano/linalg"
 )
 
 type Sphere struct {
+	material     Material
 	transform    linalg.Mat4x4
 	invTransform linalg.Mat4x4
 }
 
-func NewSphere() *Sphere {
+func NewSphere(material *Material) *Sphere {
 	id := linalg.NewMat4x4ID()
-	return &Sphere{*id, *id}
+
+	return &Sphere{
+		material:     *material,
+		transform:    *id,
+		invTransform: *id,
+	}
 }
 
-func NewTransformedSphere(transform *linalg.Mat4x4) (*Sphere, error) {
-	var res Sphere
+func NewTransformedSphere(transform *linalg.Mat4x4, material *Material) (*Sphere, error) {
+	s := Sphere{
+		material: *material,
+	}
 
-	if err := res.SetTransform(transform); err == nil {
-		return &res, nil
+	if err := s.SetTransform(transform); err == nil {
+		return &s, nil
 	} else {
 		return nil, err
 	}
+}
+
+func (s *Sphere) Material() *Material {
+	return &s.material
 }
 
 func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {

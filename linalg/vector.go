@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/float"
 )
 
 type Vector struct {
@@ -85,6 +85,10 @@ func (v Vector) Normalized() *Vector {
 
 func (v *Vector) MutNormalized() *Vector {
 	return v.MutScale(1 / v.Magnitude())
+}
+
+func (v *Vector) Reflect(norm *Vector) *Vector {
+	return norm.Scale(-2 * norm.Dot(v)).MutAdd(v)
 }
 
 func (v *Vector) Equal(oth *Vector) bool {

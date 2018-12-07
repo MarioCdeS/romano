@@ -1,17 +1,17 @@
-package graphics
+package gfx
 
 import (
 	"testing"
 )
 
 var (
-	black Color
-	red   Color
+	black *Color
+	red   *Color
 )
 
 func init() {
-	black = Color{0, 0, 0, 0}
-	red = Color{1, 0, 0, 1}
+	black = &Color{0, 0, 0, 0}
+	red = &Color{1, 0, 0, 1}
 }
 
 func TestNew(t *testing.T) {

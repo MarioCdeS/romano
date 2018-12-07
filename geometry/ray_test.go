@@ -3,7 +3,7 @@ package geometry
 import (
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer/linalg"
+	"github.com/MarioCdeS/romano/linalg"
 )
 
 func TestRay_Transform(t *testing.T) {

@@ -3,7 +3,7 @@ package linalg
 import (
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/float"
 )
 
 func TestMat3x3_SubMat(t *testing.T) {

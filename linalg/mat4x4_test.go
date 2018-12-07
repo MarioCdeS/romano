@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/float"
 )
 
 func TestMain(m *testing.M) {
@@ -108,10 +108,10 @@ func TestMat4x4_DotVector(t *testing.T) {
 		Z: m[2][0]*v.X + m[2][1]*v.Y + m[2][2]*v.Z,
 	}
 
-	got := m.DotVector(v)
+	got := m.DotVector(&v)
 
 	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
+		t.Error(expectedGotErrorString(&exp, got))
 	}
 }
 
@@ -124,10 +124,10 @@ func TestMat4x4_DotPoint(t *testing.T) {
 		Z: m[2][0]*p.X + m[2][1]*p.Y + m[2][2]*p.Z + m[2][3],
 	}
 
-	got := m.DotPoint(p)
+	got := m.DotPoint(&p)
 
 	if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
+		t.Error(expectedGotErrorString(&exp, got))
 	}
 }
 

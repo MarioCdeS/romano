@@ -3,12 +3,12 @@ package geometry
 import (
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer/linalg"
+	"github.com/MarioCdeS/romano/linalg"
 )
 
 func TestHit(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, 0}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 	hit, ok := Hit(is)
 
@@ -24,7 +24,7 @@ func TestHit(t *testing.T) {
 
 func TestHit2(t *testing.T) {
 	r := &Ray{linalg.Point{0, 2, -5}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 	_, ok := Hit(is)
 

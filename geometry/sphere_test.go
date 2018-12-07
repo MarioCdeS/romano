@@ -4,13 +4,13 @@ import (
 	"math"
 	"testing"
 
-	"github.com/MarioCdeS/romano/tracer/float"
-	"github.com/MarioCdeS/romano/tracer/linalg"
+	"github.com/MarioCdeS/romano/float"
+	"github.com/MarioCdeS/romano/linalg"
 )
 
 func TestSphere_Intersections(t *testing.T) {
 	r := &Ray{linalg.Point{0, 1, -5}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 
 	is := s.Intersections(r)
 
@@ -30,7 +30,7 @@ func TestSphere_Intersections(t *testing.T) {
 
 func TestSphere_Intersections2(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, -5}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
@@ -49,7 +49,7 @@ func TestSphere_Intersections2(t *testing.T) {
 
 func TestSphere_Intersections3(t *testing.T) {
 	r := &Ray{linalg.Point{0, 2, -5}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 
 	if len(is) > 0 {
@@ -60,7 +60,7 @@ func TestSphere_Intersections3(t *testing.T) {
 
 func TestSphere_Intersections4(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, 0}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
@@ -79,7 +79,7 @@ func TestSphere_Intersections4(t *testing.T) {
 
 func TestSphere_Intersections5(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, 5}, linalg.Vector{0, 0, 1}}
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	is := s.Intersections(r)
 
 	if len(is) != 2 {
@@ -98,7 +98,7 @@ func TestSphere_Intersections5(t *testing.T) {
 
 func TestSphere_Intersections6(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, -5}, linalg.Vector{0, 0, 1}}
-	s, err := NewTransformedSphere(linalg.NewScale(2, 2, 2))
+	s, err := NewTransformedSphere(linalg.NewScale(2, 2, 2), DefaultMaterial())
 
 	if err != nil {
 		t.Error(err)
@@ -122,7 +122,7 @@ func TestSphere_Intersections6(t *testing.T) {
 
 func TestSphere_Intersections7(t *testing.T) {
 	r := &Ray{linalg.Point{0, 0, -5}, linalg.Vector{0, 0, 1}}
-	s, err := NewTransformedSphere(linalg.NewTranslate(5, 0, 0))
+	s, err := NewTransformedSphere(linalg.NewTranslate(5, 0, 0), DefaultMaterial())
 
 	if err != nil {
 		t.Error(err)
@@ -137,7 +137,7 @@ func TestSphere_Intersections7(t *testing.T) {
 }
 
 func TestSphere_NormalAt(t *testing.T) {
-	s := NewSphere()
+	s := NewSphere(DefaultMaterial())
 	exp := linalg.Vector{1, 0, 0}
 	got := s.NormalAt(&linalg.Point{1, 0, 0})
 
@@ -147,7 +147,7 @@ func TestSphere_NormalAt(t *testing.T) {
 }
 
 func TestSphere_NormalAt2(t *testing.T) {
-	s, err := NewTransformedSphere(linalg.NewTranslate(0, 1, 0))
+	s, err := NewTransformedSphere(linalg.NewTranslate(0, 1, 0), DefaultMaterial())
 
 	if err != nil {
 		t.Error(err)
@@ -163,7 +163,10 @@ func TestSphere_NormalAt2(t *testing.T) {
 }
 
 func TestSphere_NormalAt3(t *testing.T) {
-	s, err := NewTransformedSphere(linalg.NewScale(1, 0.5, 1).Dot(linalg.NewRotateZ(math.Pi / 5)))
+	s, err := NewTransformedSphere(
+		linalg.NewScale(1, 0.5, 1).Dot(linalg.NewRotateZ(math.Pi/5)),
+		DefaultMaterial(),
+	)
 
 	if err != nil {
 		t.Error(err)

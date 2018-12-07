@@ -1,9 +1,11 @@
-package graphics
+package gfx
 
 import (
 	"image"
 	"image/color"
 	"math"
+
+	"github.com/MarioCdeS/romano/float"
 )
 
 type Canvas struct {
@@ -38,10 +40,10 @@ func (c *Canvas) Height() int {
 	return c.height
 }
 
-func (c *Canvas) Clear(col Color) {
+func (c *Canvas) Clear(col *Color) {
 	for y := 0; y < c.height; y++ {
 		for x := 0; x < c.width; x++ {
-			c.pixels[y][x] = col
+			c.pixels[y][x] = *col
 		}
 	}
 }
@@ -50,7 +52,7 @@ func (c *Canvas) At(x, y int) Color {
 	return c.pixels[y][x]
 }
 
-func (c *Canvas) Set(x, y int, col Color) {
+func (c *Canvas) Set(x, y int, col *Color) {
 	if x < 0 || x >= c.width {
 		return
 	}
@@ -59,14 +61,14 @@ func (c *Canvas) Set(x, y int, col Color) {
 		return
 	}
 
-	c.pixels[y][x] = col
+	c.pixels[y][x] = *col
 }
 
 func (c *Canvas) ToImage() image.Image {
 	img := image.NewNRGBA(image.Rect(0, 0, c.width, c.height))
 
 	float64ToUint8 := func(comp float64) uint8 {
-		return uint8(math.Round(comp * math.MaxUint8))
+		return uint8(math.Round(float.Clamp(comp, 0, 1) * math.MaxUint8))
 	}
 
 	for y := 0; y < c.height; y++ {

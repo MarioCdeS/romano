@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/float"
 )
 
 type Mat4x4 [4][4]float64

@@ -3,7 +3,7 @@ package linalg
 import (
 	"fmt"
 
-	"github.com/MarioCdeS/romano/tracer/float"
+	"github.com/MarioCdeS/romano/float"
 )
 
 type Mat2x2 [2][2]float64
