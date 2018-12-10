@@ -1,20 +1,18 @@
-package geometry
+package tracer
 
 import (
+	"fmt"
 	"math"
-
-	"github.com/MarioCdeS/romano/float"
-	"github.com/MarioCdeS/romano/linalg"
 )
 
 type Sphere struct {
 	material     Material
-	transform    linalg.Mat4x4
-	invTransform linalg.Mat4x4
+	transform    Mat4x4
+	invTransform Mat4x4
 }
 
 func NewSphere(material *Material) *Sphere {
-	id := linalg.NewMat4x4ID()
+	id := NewMat4x4ID()
 
 	return &Sphere{
 		material:     *material,
@@ -23,7 +21,7 @@ func NewSphere(material *Material) *Sphere {
 	}
 }
 
-func NewTransformedSphere(transform *linalg.Mat4x4, material *Material) (*Sphere, error) {
+func NewTransformedSphere(transform *Mat4x4, material *Material) (*Sphere, error) {
 	s := Sphere{
 		material: *material,
 	}
@@ -39,14 +37,16 @@ func (s *Sphere) Material() *Material {
 	return &s.material
 }
 
-func (s *Sphere) SetTransform(transform *linalg.Mat4x4) error {
-	if inv, err := transform.Inverse(); err == nil {
-		s.transform = *transform
-		s.invTransform = *inv
-		return nil
-	} else {
-		return err
+func (s *Sphere) SetTransform(transform *Mat4x4) error {
+	inv, ok := transform.Inverse()
+
+	if !ok {
+		return fmt.Errorf("transform matrix is not invertible\n%s", transform)
 	}
+
+	s.transform = *transform
+	s.invTransform = *inv
+	return nil
 }
 
 func (s *Sphere) Intersections(ray *Ray) []Intersection {
@@ -65,13 +65,13 @@ func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	res := make([]Intersection, 1, 2)
 	res[0] = NewIntersection((-b-sqrtDisc)/(2*a), s)
 
-	if !float.ApproxEqual(disc, 0) {
+	if !ApproxEqual(disc, 0) {
 		res = append(res, NewIntersection((-b+sqrtDisc)/(2*a), s))
 	}
 
 	return res
 }
 
-func (s *Sphere) NormalAt(p *linalg.Point) *linalg.Vector {
+func (s *Sphere) NormalAt(p *Point) *Vector {
 	return s.invTransform.T().DotVector(s.invTransform.DotPoint(p).SubPoint(Origin())).MutNormalized()
 }

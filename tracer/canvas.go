@@ -1,11 +1,9 @@
-package gfx
+package tracer
 
 import (
 	"image"
 	"image/color"
 	"math"
-
-	"github.com/MarioCdeS/romano/float"
 )
 
 type Canvas struct {
@@ -68,7 +66,7 @@ func (c *Canvas) ToImage() image.Image {
 	img := image.NewNRGBA(image.Rect(0, 0, c.width, c.height))
 
 	float64ToUint8 := func(comp float64) uint8 {
-		return uint8(math.Round(float.Clamp(comp, 0, 1) * math.MaxUint8))
+		return uint8(math.Round(Clamp(comp, 0, 1) * math.MaxUint8))
 	}
 
 	for y := 0; y < c.height; y++ {

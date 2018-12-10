@@ -1,4 +1,4 @@
-package linalg
+package tracer
 
 type Mat3x3 [3][3]float64
 

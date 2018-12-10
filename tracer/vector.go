@@ -1,10 +1,8 @@
-package linalg
+package tracer
 
 import (
 	"fmt"
 	"math"
-
-	"github.com/MarioCdeS/romano/float"
 )
 
 type Vector struct {
@@ -92,9 +90,9 @@ func (v *Vector) Reflect(norm *Vector) *Vector {
 }
 
 func (v *Vector) Equal(oth *Vector) bool {
-	return float.ApproxEqual(v.X, oth.X) &&
-		float.ApproxEqual(v.Y, oth.Y) &&
-		float.ApproxEqual(v.Z, oth.Z)
+	return ApproxEqual(v.X, oth.X) &&
+		ApproxEqual(v.Y, oth.Y) &&
+		ApproxEqual(v.Z, oth.Z)
 }
 
 func (v *Vector) String() string {

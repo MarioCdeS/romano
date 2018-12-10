@@ -1,14 +1,13 @@
-package lighting
+package tracer
 
-import (
-	"math"
+import "math"
 
-	"github.com/MarioCdeS/romano/geometry"
-	"github.com/MarioCdeS/romano/gfx"
-	"github.com/MarioCdeS/romano/linalg"
-)
+type PointLight struct {
+	Position  Point
+	Intensity Color
+}
 
-func At(p *linalg.Point, normal, eye *linalg.Vector, light *PointLight, material *geometry.Material) *gfx.Color {
+func At(p *Point, normal, eye *Vector, light *PointLight, material *Material) *Color {
 	effectCol := material.Color.Hadamard(&light.Intensity)
 	res := effectCol.Scale(material.Ambient())
 

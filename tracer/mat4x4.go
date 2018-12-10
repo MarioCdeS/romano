@@ -1,10 +1,8 @@
-package linalg
+package tracer
 
 import (
 	"fmt"
 	"strings"
-
-	"github.com/MarioCdeS/romano/float"
 )
 
 type Mat4x4 [4][4]float64
@@ -182,11 +180,11 @@ func (m *Mat4x4) Det() float64 {
 	return m[0][0]*m.Cofactor(0, 0) + m[0][1]*m.Cofactor(0, 1) + m[0][2]*m.Cofactor(0, 2) + m[0][3]*m.Cofactor(0, 3)
 }
 
-func (m *Mat4x4) Inverse() (*Mat4x4, error) {
+func (m *Mat4x4) Inverse() (*Mat4x4, bool) {
 	det := m.Det()
 
 	if det == 0 {
-		return nil, fmt.Errorf("matrix is not invertible\n%s", m)
+		return nil, false
 	}
 
 	var res Mat4x4
@@ -209,26 +207,26 @@ func (m *Mat4x4) Inverse() (*Mat4x4, error) {
 	res[3][2] = m.Cofactor(2, 3) / det
 	res[3][3] = m.Cofactor(3, 3) / det
 
-	return &res, nil
+	return &res, true
 }
 
 func (m *Mat4x4) Equal(oth *Mat4x4) bool {
-	return float.ApproxEqual(m[0][0], oth[0][0]) &&
-		float.ApproxEqual(m[0][1], oth[0][1]) &&
-		float.ApproxEqual(m[0][2], oth[0][2]) &&
-		float.ApproxEqual(m[0][3], oth[0][3]) &&
-		float.ApproxEqual(m[1][0], oth[1][0]) &&
-		float.ApproxEqual(m[1][1], oth[1][1]) &&
-		float.ApproxEqual(m[1][2], oth[1][2]) &&
-		float.ApproxEqual(m[1][3], oth[1][3]) &&
-		float.ApproxEqual(m[2][0], oth[2][0]) &&
-		float.ApproxEqual(m[2][1], oth[2][1]) &&
-		float.ApproxEqual(m[2][2], oth[2][2]) &&
-		float.ApproxEqual(m[2][3], oth[2][3]) &&
-		float.ApproxEqual(m[3][0], oth[3][0]) &&
-		float.ApproxEqual(m[3][1], oth[3][1]) &&
-		float.ApproxEqual(m[3][2], oth[3][2]) &&
-		float.ApproxEqual(m[3][3], oth[3][3])
+	return ApproxEqual(m[0][0], oth[0][0]) &&
+		ApproxEqual(m[0][1], oth[0][1]) &&
+		ApproxEqual(m[0][2], oth[0][2]) &&
+		ApproxEqual(m[0][3], oth[0][3]) &&
+		ApproxEqual(m[1][0], oth[1][0]) &&
+		ApproxEqual(m[1][1], oth[1][1]) &&
+		ApproxEqual(m[1][2], oth[1][2]) &&
+		ApproxEqual(m[1][3], oth[1][3]) &&
+		ApproxEqual(m[2][0], oth[2][0]) &&
+		ApproxEqual(m[2][1], oth[2][1]) &&
+		ApproxEqual(m[2][2], oth[2][2]) &&
+		ApproxEqual(m[2][3], oth[2][3]) &&
+		ApproxEqual(m[3][0], oth[3][0]) &&
+		ApproxEqual(m[3][1], oth[3][1]) &&
+		ApproxEqual(m[3][2], oth[3][2]) &&
+		ApproxEqual(m[3][3], oth[3][3])
 }
 
 func (m *Mat4x4) String() string {

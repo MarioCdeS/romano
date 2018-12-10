@@ -1,8 +1,6 @@
-package gfx
+package tracer
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestColor_Add(t *testing.T) {
 	c1 := Color{0.9, 0.6, 0.75, 0.5}

@@ -1,4 +1,4 @@
-package linalg
+package tracer
 
 import (
 	"fmt"
@@ -6,8 +6,6 @@ import (
 	"os"
 	"testing"
 	"time"
-
-	"github.com/MarioCdeS/romano/float"
 )
 
 func TestMain(m *testing.M) {
@@ -24,7 +22,7 @@ func TestNewMat4x4(t *testing.T) {
 		col := i % 4
 		got := m[row][col]
 
-		if !float.ApproxEqual(e, got) {
+		if !ApproxEqual(e, got) {
 			t.Errorf("at (%d, %d), expected %g, got %g", row, col, e, got)
 		}
 	}
@@ -144,7 +142,7 @@ func TestMat4x4_Det(t *testing.T) {
 	m := NewMat4x4(-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9)
 	got := m.Det()
 
-	if !float.ApproxEqual(-4071, got) {
+	if !ApproxEqual(-4071, got) {
 		t.Errorf("expected -4071, got %g", got)
 	}
 }
@@ -161,12 +159,12 @@ func TestMat4x4_Inverse(t *testing.T) {
 		-278, -433, -160, 163,
 	).Scale(1.0 / det)
 
-	got, err := m.Inverse()
-
-	if err != nil {
-		t.Error(err)
-	} else if !exp.Equal(got) {
-		t.Error(expectedGotErrorString(exp, got))
+	if got, ok := m.Inverse(); ok {
+		if !exp.Equal(got) {
+			t.Error(expectedGotErrorString(exp, got))
+		}
+	} else {
+		t.Error("matrix is not invertible")
 	}
 }
 
@@ -178,7 +176,7 @@ Outer:
 			b := NewMat4x4(randomElements16()...)
 			c := a.Dot(b)
 
-			if inv, err := b.Inverse(); err == nil {
+			if inv, ok := b.Inverse(); ok {
 				got := c.Dot(inv)
 
 				if !a.Equal(got) {

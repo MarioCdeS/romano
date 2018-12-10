@@ -1,14 +1,9 @@
-package geometry
+package tracer
 
-import (
-	"math"
-
-	"github.com/MarioCdeS/romano/float"
-	"github.com/MarioCdeS/romano/gfx"
-)
+import "math"
 
 type Material struct {
-	Color     gfx.Color
+	Color     Color
 	ambient   float64
 	diffuse   float64
 	specular  float64
@@ -17,7 +12,7 @@ type Material struct {
 
 func DefaultMaterial() *Material {
 	return &Material{
-		Color:     gfx.Color{1, 1, 1, 1},
+		Color:     Color{1, 1, 1, 1},
 		ambient:   0.1,
 		diffuse:   0.9,
 		specular:  0.9,
@@ -25,7 +20,7 @@ func DefaultMaterial() *Material {
 	}
 }
 
-func NewMaterial(color *gfx.Color, ambient, diffuse, specular, shininess float64) *Material {
+func NewMaterial(color *Color, ambient, diffuse, specular, shininess float64) *Material {
 	m := Material{Color: *color}
 	m.SetAmbient(ambient)
 	m.SetDiffuse(diffuse)
@@ -40,7 +35,7 @@ func (m *Material) Ambient() float64 {
 }
 
 func (m *Material) SetAmbient(ambient float64) {
-	m.ambient = float.Clamp(ambient, 0, 1)
+	m.ambient = Clamp(ambient, 0, 1)
 }
 
 func (m *Material) Diffuse() float64 {
@@ -48,7 +43,7 @@ func (m *Material) Diffuse() float64 {
 }
 
 func (m *Material) SetDiffuse(diffuse float64) {
-	m.diffuse = float.Clamp(diffuse, 0, 1)
+	m.diffuse = Clamp(diffuse, 0, 1)
 }
 
 func (m *Material) Specular() float64 {
@@ -56,7 +51,7 @@ func (m *Material) Specular() float64 {
 }
 
 func (m *Material) SetSpecular(specular float64) {
-	m.specular = float.Clamp(specular, 0, 1)
+	m.specular = Clamp(specular, 0, 1)
 }
 
 func (m *Material) Shininess() float64 {

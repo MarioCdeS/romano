@@ -39,7 +39,7 @@ func main() {
 	}
 
 	spherePos := center.AddVector(&linalg.Vector{0, 0, 2}).SubPoint(geometry.Origin())
-	sphereMat := geometry.NewMaterial(&gfx.Color{1, 0.2, 1, 1}, 0.1, 0.9, 0.9, 200)
+	sphereMat := geometry.NewMaterial(&gfx.Color{0, 1, 0, 1}, 0.1, 0.9, 0.9, 200)
 	sphere, err := geometry.NewTransformedSphere(
 		linalg.NewTranslateFromVec(spherePos),
 		sphereMat,

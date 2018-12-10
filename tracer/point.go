@@ -1,13 +1,13 @@
-package linalg
+package tracer
 
-import (
-	"fmt"
-
-	"github.com/MarioCdeS/romano/float"
-)
+import "fmt"
 
 type Point struct {
 	X, Y, Z float64
+}
+
+func Origin() *Point {
+	return &Point{0, 0, 0}
 }
 
 func (p Point) AddVector(v *Vector) *Point {
@@ -39,9 +39,9 @@ func (p *Point) SubPoint(oth *Point) *Vector {
 }
 
 func (p *Point) Equal(oth *Point) bool {
-	return float.ApproxEqual(p.X, oth.X) &&
-		float.ApproxEqual(p.Y, oth.Y) &&
-		float.ApproxEqual(p.Z, oth.Z)
+	return ApproxEqual(p.X, oth.X) &&
+		ApproxEqual(p.Y, oth.Y) &&
+		ApproxEqual(p.Z, oth.Z)
 }
 
 func (p *Point) String() string {

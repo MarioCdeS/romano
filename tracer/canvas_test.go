@@ -1,4 +1,4 @@
-package gfx
+package tracer
 
 import (
 	"testing"

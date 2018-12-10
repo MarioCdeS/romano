@@ -1,10 +1,6 @@
-package gfx
+package tracer
 
-import (
-	"fmt"
-
-	"github.com/MarioCdeS/romano/float"
-)
+import "fmt"
 
 type Color struct {
 	R, G, B, A float64
@@ -63,10 +59,10 @@ func (c *Color) MutHadamard(oth *Color) *Color {
 }
 
 func (c *Color) Equal(oth *Color) bool {
-	return float.ApproxEqual(c.R, oth.R) &&
-		float.ApproxEqual(c.G, oth.G) &&
-		float.ApproxEqual(c.B, oth.B) &&
-		float.ApproxEqual(c.A, oth.A)
+	return ApproxEqual(c.R, oth.R) &&
+		ApproxEqual(c.G, oth.G) &&
+		ApproxEqual(c.B, oth.B) &&
+		ApproxEqual(c.A, oth.A)
 }
 
 func (c *Color) String() string {
