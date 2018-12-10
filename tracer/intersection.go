@@ -7,10 +7,9 @@ type Intersection struct {
 	obj Object
 }
 
-func NewIntersection(t float64, obj Object) Intersection {
-	res := Intersection{t, nil}
+func NewIntersection(t float64, obj Object) *Intersection {
+	res := &Intersection{t, nil}
 	res.SetObject(obj)
-
 	return res
 }
 
@@ -26,8 +25,8 @@ func (i *Intersection) SetObject(obj Object) {
 	i.obj = obj
 }
 
-func Hit(is []Intersection) (Intersection, bool) {
-	res := Intersection{math.MaxFloat64, nil}
+func Hit(is []*Intersection) (*Intersection, bool) {
+	res := &Intersection{math.MaxFloat64, nil}
 
 	for _, i := range is {
 		if i.T >= 0 && i.T < res.T {

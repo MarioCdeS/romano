@@ -3,11 +3,31 @@ package tracer
 import "testing"
 
 func TestWorld_Intersections(t *testing.T) {
-	_, err := NewTestWorld()
+	w, err := NewTestWorld()
 
 	if err != nil {
 		t.Error(err)
 		return
+	}
+
+	r := Ray{
+		Origin:    Point{0, 0, -5},
+		Direction: Vector{0, 0, 1},
+	}
+
+	is := w.Intersections(&r)
+
+	if len(is) != 4 {
+		t.Errorf("unexpected number of intersections (%d)", len(is))
+		return
+	}
+
+	ts := [4]float64{4, 4.5, 5.5, 6}
+
+	for i, exp := range ts {
+		if !ApproxEqual(exp, is[i].T) {
+			t.Errorf("at %d, expected %g, got %g", i, exp, is[i].T)
+		}
 	}
 }
 

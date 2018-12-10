@@ -49,7 +49,7 @@ func (s *Sphere) SetTransform(transform *Mat4x4) error {
 	return nil
 }
 
-func (s *Sphere) Intersections(ray *Ray) []Intersection {
+func (s *Sphere) Intersections(ray *Ray) []*Intersection {
 	ray = ray.Transform(&s.invTransform)
 	centerToRayOrig := ray.Origin.SubPoint(Origin()) // Sphere center is at origin
 	a := ray.Direction.Dot(&ray.Direction)
@@ -62,7 +62,7 @@ func (s *Sphere) Intersections(ray *Ray) []Intersection {
 	}
 
 	sqrtDisc := math.Sqrt(disc)
-	res := make([]Intersection, 1, 2)
+	res := make([]*Intersection, 1, 2)
 	res[0] = NewIntersection((-b-sqrtDisc)/(2*a), s)
 
 	if !ApproxEqual(disc, 0) {

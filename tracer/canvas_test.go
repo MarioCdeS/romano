@@ -33,7 +33,7 @@ func TestCanvas_At(t *testing.T) {
 	at := c.At(0, 0)
 
 	if !at.Equal(black) {
-		t.Errorf("expected %s, got %s", black, at)
+		t.Errorf("expected %s, got %s", black, &at)
 	}
 }
 
@@ -44,6 +44,6 @@ func TestCanvas_Set(t *testing.T) {
 	at := c.At(0, 0)
 
 	if !at.Equal(red) {
-		t.Errorf("expected %s, got %s", red, at)
+		t.Errorf("expected %s, got %s", red, &at)
 	}
 }
