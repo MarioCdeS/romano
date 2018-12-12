@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	cnvs := tracer.NewCanvas(800, 600)
+	cnvs := tracer.NewCanvas(1024, 768)
 	black := &tracer.Color{0, 0, 0, 1}
 
 	xTick := 1 / float64(cnvs.Width())
@@ -30,13 +30,9 @@ func main() {
 
 	center := tracer.Origin().MutAddVector(xAxis.Scale(0.5)).MutAddVector(yAxis.Scale(0.5))
 	cam := center.AddVector(&tracer.Vector{0, 0, -1})
-	light := tracer.PointLight{
-		Position:  tracer.Point{-10, 10, -10},
-		Intensity: tracer.Color{1, 1, 1, 1},
-	}
 
 	spherePos := center.AddVector(&tracer.Vector{0, 0, 2}).SubPoint(tracer.Origin())
-	sphereMat := tracer.NewMaterial(&tracer.Color{0, 1, 0, 1}, 0.1, 0.9, 0.9, 200)
+	sphereMat := tracer.NewMaterial(&tracer.Color{1, 1, 1, 1}, 0.1, 0.9, 0.9, 200)
 	sphere, err := tracer.NewTransformedSphere(
 		tracer.NewTranslateFromVec(spherePos),
 		sphereMat,
@@ -45,6 +41,24 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+
+	world := &tracer.World{
+		Objects: []tracer.Object{sphere},
+		Lights: []*tracer.PointLight{
+			{
+				Position:  tracer.Point{-10, 10, -10},
+				Intensity: tracer.Color{1, 0, 0, 1},
+			},
+			{
+				Position:  tracer.Point{10, 10, -10},
+				Intensity: tracer.Color{0, 1, 0, 1},
+			},
+			{
+				Position:  tracer.Point{0, -10, -10},
+				Intensity: tracer.Color{0, 0, 1, 1},
+			},
+		},
 	}
 
 	for y := 0; y < cnvs.Height(); y++ {
@@ -58,8 +72,8 @@ func main() {
 			ray := tracer.Ray{Origin: *cam, Direction: *rayDir}
 			var col *tracer.Color
 
-			if hit, ok := tracer.FindHit(&ray, sphere.Intersections(&ray)); ok {
-				col = tracer.At(hit.Point, hit.Normal, hit.Camera, &light, hit.Object().Material())
+			if hit, ok := world.Hit(&ray); ok {
+				col = tracer.ColorAt(world, hit)
 			} else {
 				col = black
 			}

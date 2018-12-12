@@ -7,24 +7,26 @@ type PointLight struct {
 	Intensity Color
 }
 
-func At(p *Point, normal, eye *Vector, light *PointLight, material *Material) *Color {
-	effectCol := material.Color.Hadamard(&light.Intensity)
-	res := effectCol.Scale(material.Ambient())
+func ColorAt(world *World, hit *Hit) *Color {
+	var res Color
 
-	lightVec := light.Position.SubPoint(p).MutNormalized()
-	lightDotNorm := lightVec.Dot(normal)
+	for _, light := range world.Lights {
+		material := hit.obj.Material()
+		effectCol := material.Color.Hadamard(&light.Intensity)
 
-	if lightDotNorm >= 0 {
-		res.MutAdd(effectCol.Scale(material.Diffuse() * lightDotNorm))
+		res.MutAdd(effectCol.Scale(material.Ambient()))
 
-		reflectDotEye := lightVec.MutNeg().Reflect(normal).Dot(eye)
+		lightVec := light.Position.SubPoint(hit.Point).MutNormalized()
 
-		if reflectDotEye > 0 {
-			res.MutAdd(light.Intensity.Scale(material.Specular() * math.Pow(reflectDotEye, material.Shininess())))
+		if lightDotNorm := lightVec.Dot(hit.Normal); lightDotNorm >= 0 {
+			res.MutAdd(effectCol.Scale(material.Diffuse() * lightDotNorm))
+
+			if reflectDotCam := lightVec.MutNeg().Reflect(hit.Normal).Dot(hit.Camera); reflectDotCam > 0 {
+				res.MutAdd(light.Intensity.Scale(material.Specular() * math.Pow(reflectDotCam, material.Shininess())))
+			}
 		}
 	}
 
 	res.A = 1
-
-	return res
+	return &res
 }

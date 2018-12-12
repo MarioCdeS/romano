@@ -21,6 +21,11 @@ func (w *World) Intersections(ray *Ray) []*Intersection {
 	return res
 }
 
+func (w *World) Hit(ray *Ray) (*Hit, bool) {
+	is := w.Intersections(ray)
+	return FindHit(ray, is)
+}
+
 func (t byT) Len() int {
 	return len(t)
 }
