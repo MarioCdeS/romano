@@ -58,10 +58,8 @@ func main() {
 			ray := tracer.Ray{Origin: *cam, Direction: *rayDir}
 			var col *tracer.Color
 
-			if hit, ok := tracer.Hit(sphere.Intersections(&ray)); ok {
-				point := ray.PointAt(hit.T)
-				camVec := ray.Direction.Neg().MutNormalized()
-				col = tracer.At(point, hit.Object().NormalAt(point), camVec, &light, hit.Object().Material())
+			if hit, ok := tracer.FindHit(&ray, sphere.Intersections(&ray)); ok {
+				col = tracer.At(hit.Point, hit.Normal, hit.Camera, &light, hit.Object().Material())
 			} else {
 				col = black
 			}

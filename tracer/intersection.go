@@ -1,7 +1,5 @@
 package tracer
 
-import "math"
-
 type Intersection struct {
 	T   float64
 	obj Object
@@ -23,16 +21,4 @@ func (i *Intersection) SetObject(obj Object) {
 	}
 
 	i.obj = obj
-}
-
-func Hit(is []*Intersection) (*Intersection, bool) {
-	res := &Intersection{math.MaxFloat64, nil}
-
-	for _, i := range is {
-		if i.T >= 0 && i.T < res.T {
-			res = i
-		}
-	}
-
-	return res, res.obj != nil
 }
