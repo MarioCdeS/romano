@@ -7,7 +7,13 @@ type PointLight struct {
 	Intensity Color
 }
 
-func ColorAt(world *World, hit *Hit) *Color {
+func ColorAt(world *World, ray *Ray) *Color {
+	hit, ok := FindHit(ray, world.Intersections(ray))
+
+	if !ok {
+		return &Color{0, 0, 0, 1}
+	}
+
 	var res Color
 
 	for _, light := range world.Lights {

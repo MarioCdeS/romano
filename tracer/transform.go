@@ -69,3 +69,7 @@ func NewShear(xy, xz, yx, yz, zx, zy float64) *Mat4x4 {
 		{0, 0, 0, 1},
 	}
 }
+
+func NewViewTransform(from, to *Point, up *Vector) *Mat4x4 {
+
+}

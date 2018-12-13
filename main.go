@@ -10,8 +10,6 @@ import (
 
 func main() {
 	cnvs := tracer.NewCanvas(1024, 768)
-	black := &tracer.Color{0, 0, 0, 1}
-
 	xTick := 1 / float64(cnvs.Width())
 	yTick := 1 / float64(cnvs.Height())
 
@@ -70,15 +68,8 @@ func main() {
 				MutAddVector(rayDirY).
 				SubPoint(cam)
 			ray := tracer.Ray{Origin: *cam, Direction: *rayDir}
-			var col *tracer.Color
 
-			if hit, ok := world.Hit(&ray); ok {
-				col = tracer.ColorAt(world, hit)
-			} else {
-				col = black
-			}
-
-			cnvs.Set(x, cnvs.Height()-y-1, col)
+			cnvs.Set(x, cnvs.Height()-y-1, tracer.ColorAt(world, &ray))
 		}
 	}
 
